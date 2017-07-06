@@ -4,6 +4,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import _ from 'lodash';
+import { Throttle } from 'react-throttle';
 import categories from '../constant/bookTitles';
 import Book from './book';
 import * as BooksAPI from '../BooksAPI';
@@ -16,12 +18,18 @@ export default class SearchBook extends Component {
         moveFromNone: PropTypes.func
     };
     state = {
-        query: '',
-        books: []
+        library: this.props.library,
+        queryResult: [],
+
     };
     createMatchedBook = (book, index) => {
         book.authors = book.authors || [];
-        book.backgroundImage = book.imageLinks.thumbnail;
+        if(book.imageLinks) {
+            book.backgroundImage = book.imageLinks.thumbnail
+        }
+        else {
+            book.backgroundImage = '';
+        }
         if (book.shelf === categories.CURRENT[0]) {
             return (
                 <li key={ index }>
@@ -68,27 +76,41 @@ export default class SearchBook extends Component {
         }
     };
 
+    sync = (queryResult , library) => {
+        _.forEach(queryResult, function(book) {
+            let matchedBookFromLibrary = _.find(library, {'id': book.id});
+            if (matchedBookFromLibrary !== undefined) {
+                book.shelf = matchedBookFromLibrary.shelf;
+            }
+        });
+        return queryResult;
+
+    };
 
     updateQuery = (event) => {
-        let matchedBooks;
         const query = event.target.value;
-        this.setState({
-            query,
-        });
-
-        if(query === ''){
-            return;
-        }
-
         BooksAPI.search(query, 20)
             .then(books => {
                 books = books || [];
-                matchedBooks = books.map(this.createMatchedBook);
+                books = this.sync(books, this.state.library);
                 this.setState({
-                    books: matchedBooks
+                    queryResult: books
                 })
+            })
+            .catch(err => {
+                this.setState({
+                    queryResult: []
+                });
+                console.log(err)
             });
     };
+    componentWillReceiveProps(nextProps) {
+        let queryResult = this.state.queryResult;
+        queryResult = this.sync(queryResult, nextProps.library);
+        this.setState({
+            queryResult
+        })
+    }
 
     render() {
         const {query} = this.state;
@@ -97,24 +119,22 @@ export default class SearchBook extends Component {
                 <div className="search-books-bar">
                     <Link className='close-search' to='/'>Close</Link>
                     <div className="search-books-input-wrapper">
+                        <Throttle time="200" handler="onChange">
                             <input
                                 type="text"
                                 placeholder="Search by title or author"
-                                value={ query }
                                 onChange={this.updateQuery}
                             />
+                        </Throttle>
                     </div>
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {query !== '' && this.state.books}
+                        {query !== '' && this.state.queryResult.map(this.createMatchedBook)}
                     </ol>
                 </div>
             </div>
         )
     }
-    componentDidMount() {
-        //BooksAPI.search('Satire', 20)
-          //  .then(books => console.log(books));
-    }
+
 }

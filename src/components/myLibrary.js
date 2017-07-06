@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import BookShelf from './bookShelf';
-import  Loader from 'halogen/PulseLoader';
+//import  Loader from 'halogen/PulseLoader';
 
 const MyLibrary = (props) => {
     const {currentList, wishList, readList, isLoading} = props;
@@ -14,7 +14,7 @@ const MyLibrary = (props) => {
                 <h1>MyReads</h1>
             </div>
             {isLoading ? (
-                <Loader color="#26A65B" size="16px" margin="4px"/>
+                {/*<Loader color="#26A65B" size="16px" margin="4px"/>*/}
             ) : (
                 <div className="list-books-content">
                     <div>

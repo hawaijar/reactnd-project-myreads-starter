@@ -19,6 +19,7 @@ class BooksApp extends React.Component {
         currentList,
         wishList,
         readList,
+        books: [...currentList.books, ...wishList.books, ...readList.books],
         isLoading: false,
         showSearchPage: false
     };
@@ -127,6 +128,7 @@ class BooksApp extends React.Component {
                 currentList: newCurrentList,
                 wishList: newWishList,
                 readList: newReadList,
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books]
             });
         });
     }
@@ -157,6 +159,7 @@ class BooksApp extends React.Component {
                 <Route path='/search' render={() => (
                     <SearchBook
                         { ...libProps.actions }
+                        library={this.state.books}
                     />
 
                 )}/>

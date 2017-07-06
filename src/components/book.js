@@ -10,15 +10,22 @@ export default class Book extends Component {
         book: PropTypes.object.isRequired,
         moveBookToAnotherShelf: PropTypes.func.isRequired
     };
+    static defaultProps = {
+        book: {shelf: 'None'}
+    };
+
+    state = {
+        book: {},
+        selectedBookId: ''
+    };
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            value: nextProps.shelf
+            book: nextProps.book
         })
     }
 
     render() {
-
         const book = this.props.book;
         const {title, authors, backgroundImage} = book;
         let {shelf, moveBookToAnotherShelf} = this.props;
@@ -41,11 +48,11 @@ export default class Book extends Component {
                                         }
                                     }
                                 }>
-                            <option value="none" disabled>Move to...</option>
+                            <option value="default" disabled>Move to...</option>
                             <option value="Currently Reading">Currently Reading</option>
                             <option value="Want to Read">Want to Read</option>
                             <option value="Read">Read</option>
-                            <option value="none">None</option>
+                            <option value="None">None</option>
                         </select>
                     </div>
                 </div>
