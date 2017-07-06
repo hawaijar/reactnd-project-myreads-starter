@@ -1,46 +1,62 @@
 /**
  * Created by hawaijar on 7/4/17.
  */
-import React from 'react'
+import React, {Component} from 'react'
 import {PropTypes} from 'prop-types';
 
-const Book = (props) => {
-    const book = props.book;
-    const { title, authors, backgroundImage } = book;
-    const {shelf, moveBookToAnotherShelf} = props;
+export default class Book extends Component {
+    static  propTypes = {
+        shelf: PropTypes.string.isRequired,
+        book: PropTypes.object.isRequired,
+        moveBookToAnotherShelf: PropTypes.func.isRequired
+    };
 
-    return (
-        <div className="book">
-            <div className="book-top">
-                <div className="book-cover" style={{
-                    width: 128,
-                    height: 193,
-                    backgroundImage: `url(${backgroundImage}`
-                }}>{true}</div>
-                <div className="book-shelf-changer">
-                    <select value={ shelf }
-                            onChange={ (e) => moveBookToAnotherShelf(book, shelf, e.target.value)}>
-                        <option value="none" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
-                    </select>
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            value: nextProps.shelf
+        })
+    }
+
+    render() {
+        const book = this.props.book;
+        const {title, authors, backgroundImage} = book;
+        let {shelf, moveBookToAnotherShelf} = this.props;
+
+        return (
+            <div className="book">
+                <div className="book-top">
+                    <div className="book-cover" style={{
+                        width: 128,
+                        height: 193,
+                        backgroundImage: `url(${backgroundImage}`
+                    }}>{true}</div>
+                    <div className="book-shelf-changer">
+                        <select value={ shelf }
+                                onChange={
+                                    (e) => {
+                                        const value = e.target.value;
+                                        if (value !== 'None') {
+                                            if (value !== shelf) {
+                                                moveBookToAnotherShelf(book, value);
+                                            }
+                                        }
+                                    }
+                                }>
+                            <option value="none" disabled>Move to...</option>
+                            <option value="Currently Reading">Currently Reading</option>
+                            <option value="Want to Read">Want to Read</option>
+                            <option value="Read">Read</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div className="book-title">{ title }</div>
-            <div className="book-authors">{ authors }</div>
-        </div>
-    )
-};
-Book.propTypes = {
-    shelf: PropTypes.string.isRequired,
-    book: PropTypes.object.isRequired,
-    moveBookToAnotherShelf: PropTypes.func
-};
-Book.defaultProps = {
-    shelf: '',
-    book: {}
-};
+                <div className="book-title">{ title }</div>
+                {authors.map(author => (
+                    <div key={ author} className="book-authors">{ author }</div>
+                ))}
 
-export default Book;
+            </div>
+        )
+    }
+}
+
