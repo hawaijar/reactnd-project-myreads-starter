@@ -18,6 +18,7 @@ export default class Book extends Component {
     }
 
     render() {
+
         const book = this.props.book;
         const {title, authors, backgroundImage} = book;
         let {shelf, moveBookToAnotherShelf} = this.props;
@@ -35,10 +36,8 @@ export default class Book extends Component {
                                 onChange={
                                     (e) => {
                                         const value = e.target.value;
-                                        if (value !== 'None') {
-                                            if (value !== shelf) {
-                                                moveBookToAnotherShelf(book, value);
-                                            }
+                                        if (value !== shelf) {
+                                            moveBookToAnotherShelf(book, value);
                                         }
                                     }
                                 }>

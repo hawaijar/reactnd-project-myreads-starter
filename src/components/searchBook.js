@@ -4,24 +4,27 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
 import categories from '../constant/bookTitles';
 import Book from './book';
+import * as BooksAPI from '../BooksAPI';
 
 export default class SearchBook extends Component {
     static propTypes = {
         moveFromCurrentList: PropTypes.func,
         moveFromWishList: PropTypes.func,
         moveFromReadList: PropTypes.func,
+        moveFromNone: PropTypes.func
     };
     state = {
         query: '',
         books: []
     };
-    createMatchedBook = (book) => {
+    createMatchedBook = (book, index) => {
+        book.authors = book.authors || [];
+        book.backgroundImage = book.imageLinks.thumbnail;
         if (book.shelf === categories.CURRENT[0]) {
             return (
-                <li key={ book.title }>
+                <li key={ index }>
                     <Book
                         book={ book }
                         moveBookToAnotherShelf={ this.props.moveFromCurrentList }
@@ -32,7 +35,7 @@ export default class SearchBook extends Component {
         }
         else if (book.shelf === categories.WISH[0]) {
             return (
-                <li key={ book.title }>
+                <li key={ index }>
                     <Book
                         book={ book }
                         moveBookToAnotherShelf={ this.props.moveFromWishList }
@@ -41,13 +44,24 @@ export default class SearchBook extends Component {
                 </li>
             )
         }
-        else {
+        else if (book.shelf === categories.READ[0]){
             return (
-                <li key={ book.title }>
+                <li key={ index }>
                     <Book
                         book={ book }
                         moveBookToAnotherShelf={ this.props.moveFromReadList }
-                        shelf={ categories.WISH[1] }
+                        shelf={ categories.READ[1] }
+                    />
+                </li>
+            )
+        }
+        else if (book.shelf === categories.NONE[0]){
+            return (
+                <li key={ index }>
+                    <Book
+                        book={ book }
+                        moveBookToAnotherShelf={ this.props.moveFromNone }
+                        shelf={ categories.NONE[1] }
                     />
                 </li>
             )
@@ -55,18 +69,25 @@ export default class SearchBook extends Component {
     };
 
 
-    updateQuery = (query) => {
-        let matchedBooks = []
-        const match = new RegExp(escapeRegExp(query), 'i');
-        const books = []; // get from BooksAPI
-        matchedBooks = books.filter((book) => match.test(book.title))
-            .map(this.createMatchedBook);
+    updateQuery = (event) => {
+        let matchedBooks;
+        const query = event.target.value;
         this.setState({
             query,
-            books: matchedBooks
-        })
+        });
 
+        if(query === ''){
+            return;
+        }
 
+        BooksAPI.search(query, 20)
+            .then(books => {
+                books = books || [];
+                matchedBooks = books.map(this.createMatchedBook);
+                this.setState({
+                    books: matchedBooks
+                })
+            });
     };
 
     render() {
@@ -76,12 +97,12 @@ export default class SearchBook extends Component {
                 <div className="search-books-bar">
                     <Link className='close-search' to='/'>Close</Link>
                     <div className="search-books-input-wrapper">
-                        <input
-                            type="text"
-                            placeholder="Search by title or author"
-                            value={ query }
-                            onChange={(event) => this.updateQuery(event.target.value)}
-                        />
+                            <input
+                                type="text"
+                                placeholder="Search by title or author"
+                                value={ query }
+                                onChange={this.updateQuery}
+                            />
                     </div>
                 </div>
                 <div className="search-books-results">
@@ -91,5 +112,9 @@ export default class SearchBook extends Component {
                 </div>
             </div>
         )
+    }
+    componentDidMount() {
+        //BooksAPI.search('Satire', 20)
+          //  .then(books => console.log(books));
     }
 }

@@ -28,6 +28,7 @@ class BooksApp extends React.Component {
         this.moveFromCurrentList = this.moveFromCurrentList.bind(this);
         this.moveFromWishList = this.moveFromWishList.bind(this);
         this.moveFromReadList = this.moveFromReadList.bind(this);
+        this.moveTo = this.moveTo.bind(this);
     }
     moveFromCurrentList(book, toShelf) {
         const title = book.title;
@@ -103,6 +104,32 @@ class BooksApp extends React.Component {
             })
         });
     }
+    moveTo(book, toShelf) {
+        this.setState(prevState => {
+            let newCurrentList = prevState.currentList;
+            let newWishList = prevState.wishList;
+            let newReadList = prevState.readList;
+
+            if (toShelf === categories.CURRENT[1]) {
+                book.shelf = categories.CURRENT[0];
+                newCurrentList.books = [...newCurrentList.books, book];
+            }
+            else if (toShelf === categories.WISH[1]) {
+                book.shelf = categories.WISH[0];
+                newWishList.books = [...newWishList.books, book];
+            }
+            else {
+                book.shelf = categories.READ[0];
+                newWishList.books = [...newWishList.books, book];
+            }
+
+            return ({
+                currentList: newCurrentList,
+                wishList: newWishList,
+                readList: newReadList,
+            });
+        });
+    }
 
     render() {
         const libProps = {
@@ -112,7 +139,8 @@ class BooksApp extends React.Component {
             actions: {
                 moveFromCurrentList: this.moveFromCurrentList,
                 moveFromWishList: this.moveFromWishList,
-                moveFromReadList: this.moveFromReadList
+                moveFromReadList: this.moveFromReadList,
+                moveFromNone: this.moveTo
             },
             isLoading: this.state.isLoading
         };
