@@ -1,9 +1,12 @@
 import React from 'react'
-import * as BooksAPI from './BooksAPI'
+import { Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+//import * as BooksAPI from './BooksAPI'
 import './App.css'
 import {currentList, wishList, readList} from './test/bookData'
-import BookShelf from './components/bookShelf';
 import categories from './constant/bookTitles';
+import MyLibrary from './components/myLibrary';
+import SearchBook from './components/searchBook';
 
 class BooksApp extends React.Component {
     state = {
@@ -16,6 +19,7 @@ class BooksApp extends React.Component {
         currentList,
         wishList,
         readList,
+        isLoading: false,
         showSearchPage: false
     };
 
@@ -101,46 +105,33 @@ class BooksApp extends React.Component {
     }
 
     render() {
+        const libProps = {
+            currentList: this.state.currentList,
+            wishList: this.state.wishList,
+            readList: this.state.readList,
+            actions: {
+                moveFromCurrentList: this.moveFromCurrentList,
+                moveFromWishList: this.moveFromWishList,
+                moveFromReadList: this.moveFromReadList
+            },
+            isLoading: this.state.isLoading
+        };
         return (
-            <div className="app">
-                {this.state.showSearchPage ? (
-                    <div className="search-books">
-                        <div className="search-books-bar">
-                            <a className="close-search" onClick={() => this.setState({showSearchPage: false})}>Close</a>
-                            <div className="search-books-input-wrapper">
-                                <input type="text" placeholder="Search by title or author"/>
-                            </div>
-                        </div>
-                        <div className="search-books-results">
-                            <ol className="books-grid">{true}</ol>
+            <div>
+                <Route exact path='/' render={() => (
+                    <div>
+                        <MyLibrary {...libProps} />
+                        <div className="open-search">
+                            <Link to='/search'>Close</Link>
                         </div>
                     </div>
-                ) : (
-                    <div className="list-books">
-                        <div className="list-books-title">
-                            <h1>MyReads</h1>
-                        </div>
-                        <div className="list-books-content">
-                            <div>
-                                <BookShelf
-                                    shelf={ this.state.currentList.shelf }
-                                    books={ this.state.currentList.books }
-                                    moveBookToAnotherShelf={ this.moveFromCurrentList }
-                                />
-                                <BookShelf
-                                    shelf={ this.state.wishList.shelf }
-                                    books={ this.state.wishList.books }
-                                    moveBookToAnotherShelf={ this.moveFromWishList }
-                                />
-                                <BookShelf
-                                    shelf={ this.state.readList.shelf }
-                                    books={ this.state.readList.books }
-                                    moveBookToAnotherShelf={ this.moveFromReadList }
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
+                )}/>
+                <Route path='/search' render={() => (
+                    <SearchBook
+                        { ...libProps.actions }
+                    />
+
+                )}/>
             </div>
         )
     }
