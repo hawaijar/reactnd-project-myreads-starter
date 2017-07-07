@@ -15,7 +15,7 @@ export default class SearchBook extends Component {
         moveFromCurrentList: PropTypes.func,
         moveFromWishList: PropTypes.func,
         moveFromReadList: PropTypes.func,
-        moveFromNone: PropTypes.func
+        addToLibrary: PropTypes.func
     };
     state = {
         library: this.props.library,
@@ -68,7 +68,7 @@ export default class SearchBook extends Component {
                 <li key={ index }>
                     <Book
                         book={ book }
-                        moveBookToAnotherShelf={ this.props.moveFromNone }
+                        moveBookToAnotherShelf={ this.props.addToLibrary }
                         shelf={ categories.NONE[1] }
                     />
                 </li>
@@ -77,10 +77,10 @@ export default class SearchBook extends Component {
     };
 
     sync = (queryResult , library) => {
-        _.forEach(queryResult, function(book) {
+        _.forEach(queryResult, function(book){
             let matchedBookFromLibrary = _.find(library, {'id': book.id});
             if (matchedBookFromLibrary !== undefined) {
-                book.shelf = matchedBookFromLibrary.shelf;
+                book.shelf = categories.map[matchedBookFromLibrary.shelf];
             }
         });
         return queryResult;

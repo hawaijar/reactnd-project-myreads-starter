@@ -33,7 +33,6 @@ class BooksApp extends React.Component {
         this.moveFromCurrentList = this.moveFromCurrentList.bind(this);
         this.moveFromWishList = this.moveFromWishList.bind(this);
         this.moveFromReadList = this.moveFromReadList.bind(this);
-        //this.removeFromLibrary = this.removeFromLibrary.bind(this);
         this.addToLibrary = this.addToLibrary.bind(this);
     }
     moveFromCurrentList(book, toShelf) {
@@ -42,17 +41,16 @@ class BooksApp extends React.Component {
             let newWishList = prevState.wishList;
             let newReadList = prevState.readList;
             let newNoneList = prevState.noneList;
+            // 'book' is immutable as it's prop in the BookComponent!
+            let newBook = Object.assign({}, book, {shelf: toShelf});
             if (toShelf === categories.WISH[1]) {
-                book.shelf = categories.WISH[0];
-                newWishList.books = [...newWishList.books, book];
+                newWishList.books = [...newWishList.books, newBook];
             }
             else if (toShelf === categories.NONE[1]){
-                book.shelf = categories.NONE[1];
-                newNoneList.books = [...newNoneList.books, book];
+                newNoneList.books = [...newNoneList.books, newBook];
             }
             else {
-                book.shelf = categories.READ[0];
-                newReadList.books = [...newReadList.books, book];
+                newReadList.books = [...newReadList.books, newBook];
             }
             let newCurrentListBooks = prevState.currentList.books.filter(book => book.title !== title);
             let newCurrentList = prevState.currentList;
@@ -73,17 +71,17 @@ class BooksApp extends React.Component {
             let newCurrentList = prevState.currentList;
             let newReadList = prevState.readList;
             let newNoneList = prevState.noneList;
+            // 'book' is immutable as it's prop in the BookComponent!
+            let newBook = Object.assign({}, book, {shelf: toShelf});
             if (toShelf === categories.READ[1]) {
-                book.shelf = categories.READ[0];
-                newReadList.books = [...newReadList.books, book];
+                newReadList.books = [...newReadList.books, newBook];
             }
             else if (toShelf === categories.NONE[1]){
-                book.shelf = categories.NONE[1];
-                newNoneList.books = [...newNoneList.books, book];
+                newNoneList.books = [...newNoneList.books, newBook];
             }
             else {
                 book.shelf = categories.CURRENT[0];
-                newCurrentList.books = [...newCurrentList.books, book];
+                newCurrentList.books = [...newCurrentList.books, newBook];
             }
 
             let newWishListBooks = prevState.wishList.books.filter(book => book.title !== title);
@@ -105,18 +103,17 @@ class BooksApp extends React.Component {
             let newCurrentList = prevState.currentList;
             let newWishList = prevState.wishList;
             let newNoneList = prevState.noneList;
+            // 'book' is immutable as it's prop in the BookComponent!
+            let newBook = Object.assign({}, book, {shelf: toShelf});
 
             if (toShelf === categories.WISH[1]) {
-                book.shelf = categories.WISH[0];
-                newWishList.books = [...newWishList.books, book];
+                newWishList.books = [...newWishList.books, newBook];
             }
             else if (toShelf === categories.CURRENT[1]){
-                book.shelf = categories.CURRENT[0];
-                newCurrentList.books = [...newCurrentList.books, book];
+                newCurrentList.books = [...newCurrentList.books, newBook];
             }
             else if (toShelf === categories.NONE[1]){
-                book.shelf = categories.NONE[1];
-                newNoneList.books = [...newNoneList.books, book];
+                newNoneList.books = [...newNoneList.books, newBook];
             }
             let newReadListBooks = prevState.readList.books.filter(book => book.title !== title);
             let newReadList = prevState.readList;
@@ -139,16 +136,16 @@ class BooksApp extends React.Component {
             let newNoneList = prevState.noneList;
 
             const title = book.title;
-
-            book.shelf = toShelf;
+            // 'book' is immutable as it's prop in the BookComponent!
+            let newBook = Object.assign({}, book, {shelf: toShelf});
             if (toShelf === categories.CURRENT[1]) {
-                newCurrentList.books = [...newCurrentList.books, book];
+                newCurrentList.books = [...newCurrentList.books, newBook];
             }
             else if (toShelf === categories.WISH[1]) {
-                newWishList.books = [...newWishList.books, book];
+                newWishList.books = [...newWishList.books, newBook];
             }
             else if (toShelf === categories.READ[1]){
-                newReadList.books = [...newReadList.books, book];
+                newReadList.books = [...newReadList.books, newBook];
             }
             newNoneList.books = prevState.noneList.books.filter(book => book.title !== title);
 
@@ -157,7 +154,7 @@ class BooksApp extends React.Component {
                 wishList: newWishList,
                 readList: newReadList,
                 noneList: newNoneList,
-                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books, newNoneList.books]
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books, ...newNoneList.books]
             });
         });
     }
