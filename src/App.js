@@ -1,31 +1,24 @@
 import React from 'react'
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-//import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
-import {currentList, wishList, readList} from './test/bookData'
+//import {currentList, wishList, readList} from './test/bookData'
 import categories from './constant/bookTitles';
 import MyLibrary from './components/myLibrary';
 import SearchBook from './components/searchBook';
 
 class BooksApp extends React.Component {
     state = {
-        /**
-         * TODO: Instead of using this state variable to keep track of which page
-         * we're on, use the URL in the browser's address bar. This will ensure that
-         * users can use the browser's back and forward buttons to navigate between
-         * pages, as well as provide a good URL they can bookmark and share.
-         */
-        currentList,
-        wishList,
-        readList,
+        currentList: [],
+        wishList: [],
+        readList: [],
         noneList: {
             books: [],
             shelf: categories.NONE[1]
         },
-        books: [...currentList.books, ...wishList.books, ...readList.books],
+        books: [],
         isLoading: false,
-        showSearchPage: false
     };
 
     constructor() {
@@ -34,6 +27,30 @@ class BooksApp extends React.Component {
         this.moveFromWishList = this.moveFromWishList.bind(this);
         this.moveFromReadList = this.moveFromReadList.bind(this);
         this.addToLibrary = this.addToLibrary.bind(this);
+    }
+    componentDidMount(){
+        BooksAPI.getAll()
+            .then(books => {
+                let newCurrentList = {};
+                newCurrentList.books = books.filter(book => book.shelf === categories.CURRENT[0]);
+                newCurrentList.shelf = categories.CURRENT[1];
+
+                let newWishList = {};
+                newWishList.books = books.filter(book => book.shelf === categories.WISH[0]);
+                newWishList.shelf = categories.WISH[1];
+
+                let newReadList = {};
+                newReadList.books = books.filter(book => book.shelf === categories.READ[0]);
+                newReadList.shelf = categories.READ[1];
+
+                this.setState({
+                    currentList: newCurrentList,
+                    wishList: newWishList,
+                    readList: newReadList,
+                    isLoading: false,
+                    books
+                });
+            });
     }
     moveFromCurrentList(book, toShelf) {
         const title = book.title;
