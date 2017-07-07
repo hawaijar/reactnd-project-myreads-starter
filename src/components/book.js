@@ -27,7 +27,7 @@ export default class Book extends Component {
 
     render() {
         const book = this.props.book;
-        const {title, authors, backgroundImage} = book;
+        const {title, authors, imageLinks} = book;
         let {shelf, moveBookToAnotherShelf} = this.props;
 
         return (
@@ -36,7 +36,7 @@ export default class Book extends Component {
                     <div className="book-cover" style={{
                         width: 128,
                         height: 193,
-                        backgroundImage: `url(${backgroundImage}`
+                        backgroundImage: `url(${imageLinks.thumbnail}`
                     }}>{true}</div>
                     <div className="book-shelf-changer">
                         <select value={ shelf }
