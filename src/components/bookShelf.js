@@ -5,12 +5,14 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import Book from './book';
+import categories from '../constant/bookTitles';
 
 const BookShelf = (props) => {
     const {shelf, books, moveBookToAnotherShelf} = props;
+    const title = "None (not in any shelf)";
     return (
         <div className="bookshelf">
-            <h2 className="bookshelf-title">{ shelf }</h2>
+            <h2 className="bookshelf-title">{ shelf === categories.NONE[1]?title: shelf }</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     {books.map((book, index) => (

@@ -19,6 +19,10 @@ class BooksApp extends React.Component {
         currentList,
         wishList,
         readList,
+        noneList: {
+            books: [],
+            shelf: categories.NONE[1]
+        },
         books: [...currentList.books, ...wishList.books, ...readList.books],
         isLoading: false,
         showSearchPage: false
@@ -29,16 +33,22 @@ class BooksApp extends React.Component {
         this.moveFromCurrentList = this.moveFromCurrentList.bind(this);
         this.moveFromWishList = this.moveFromWishList.bind(this);
         this.moveFromReadList = this.moveFromReadList.bind(this);
-        this.moveTo = this.moveTo.bind(this);
+        //this.removeFromLibrary = this.removeFromLibrary.bind(this);
+        this.addToLibrary = this.addToLibrary.bind(this);
     }
     moveFromCurrentList(book, toShelf) {
         const title = book.title;
         this.setState(prevState => {
             let newWishList = prevState.wishList;
             let newReadList = prevState.readList;
+            let newNoneList = prevState.noneList;
             if (toShelf === categories.WISH[1]) {
                 book.shelf = categories.WISH[0];
                 newWishList.books = [...newWishList.books, book];
+            }
+            else if (toShelf === categories.NONE[1]){
+                book.shelf = categories.NONE[1];
+                newNoneList.books = [...newNoneList.books, book];
             }
             else {
                 book.shelf = categories.READ[0];
@@ -51,7 +61,8 @@ class BooksApp extends React.Component {
                 currentList: newCurrentList,
                 wishList: newWishList,
                 readList: newReadList,
-                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books]
+                noneList: newNoneList,
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books,...newNoneList.books]
             })
         });
     }
@@ -61,14 +72,20 @@ class BooksApp extends React.Component {
         this.setState(prevState => {
             let newCurrentList = prevState.currentList;
             let newReadList = prevState.readList;
+            let newNoneList = prevState.noneList;
             if (toShelf === categories.READ[1]) {
                 book.shelf = categories.READ[0];
                 newReadList.books = [...newReadList.books, book];
+            }
+            else if (toShelf === categories.NONE[1]){
+                book.shelf = categories.NONE[1];
+                newNoneList.books = [...newNoneList.books, book];
             }
             else {
                 book.shelf = categories.CURRENT[0];
                 newCurrentList.books = [...newCurrentList.books, book];
             }
+
             let newWishListBooks = prevState.wishList.books.filter(book => book.title !== title);
             let newWishList = prevState.wishList;
             newWishList.books = newWishListBooks;
@@ -76,7 +93,8 @@ class BooksApp extends React.Component {
                 currentList: newCurrentList,
                 wishList: newWishList,
                 readList: newReadList,
-                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books]
+                noneList: newNoneList,
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books,...newNoneList.books]
             })
         });
     }
@@ -86,13 +104,19 @@ class BooksApp extends React.Component {
         this.setState(prevState => {
             let newCurrentList = prevState.currentList;
             let newWishList = prevState.wishList;
+            let newNoneList = prevState.noneList;
+
             if (toShelf === categories.WISH[1]) {
                 book.shelf = categories.WISH[0];
                 newWishList.books = [...newWishList.books, book];
             }
-            else {
+            else if (toShelf === categories.CURRENT[1]){
                 book.shelf = categories.CURRENT[0];
                 newCurrentList.books = [...newCurrentList.books, book];
+            }
+            else if (toShelf === categories.NONE[1]){
+                book.shelf = categories.NONE[1];
+                newNoneList.books = [...newNoneList.books, book];
             }
             let newReadListBooks = prevState.readList.books.filter(book => book.title !== title);
             let newReadList = prevState.readList;
@@ -101,34 +125,39 @@ class BooksApp extends React.Component {
                 currentList: newCurrentList,
                 wishList: newWishList,
                 readList: newReadList,
-                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books]
+                noneList: newNoneList,
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books, ...newNoneList.books]
             })
         });
     }
-    moveTo(book, toShelf) {
+
+    addToLibrary(book, toShelf) {
         this.setState(prevState => {
             let newCurrentList = prevState.currentList;
             let newWishList = prevState.wishList;
             let newReadList = prevState.readList;
+            let newNoneList = prevState.noneList;
 
+            const title = book.title;
+
+            book.shelf = toShelf;
             if (toShelf === categories.CURRENT[1]) {
-                book.shelf = categories.CURRENT[0];
                 newCurrentList.books = [...newCurrentList.books, book];
             }
             else if (toShelf === categories.WISH[1]) {
-                book.shelf = categories.WISH[0];
                 newWishList.books = [...newWishList.books, book];
             }
-            else {
-                book.shelf = categories.READ[0];
-                newWishList.books = [...newWishList.books, book];
+            else if (toShelf === categories.READ[1]){
+                newReadList.books = [...newReadList.books, book];
             }
+            newNoneList.books = prevState.noneList.books.filter(book => book.title !== title);
 
             return ({
                 currentList: newCurrentList,
                 wishList: newWishList,
                 readList: newReadList,
-                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books]
+                noneList: newNoneList,
+                books: [...newCurrentList.books, ...newWishList.books, ...newReadList.books, newNoneList.books]
             });
         });
     }
@@ -138,11 +167,12 @@ class BooksApp extends React.Component {
             currentList: this.state.currentList,
             wishList: this.state.wishList,
             readList: this.state.readList,
+            noneList: this.state.noneList,
             actions: {
                 moveFromCurrentList: this.moveFromCurrentList,
                 moveFromWishList: this.moveFromWishList,
                 moveFromReadList: this.moveFromReadList,
-                moveFromNone: this.moveTo
+                addToLibrary: this.addToLibrary
             },
             isLoading: this.state.isLoading
         };

@@ -6,8 +6,12 @@ import BookShelf from './bookShelf';
 //import  Loader from 'halogen/PulseLoader';
 
 const MyLibrary = (props) => {
-    const {currentList, wishList, readList, isLoading} = props;
-    const {moveFromCurrentList, moveFromWishList, moveFromReadList} = props.actions;
+    const {currentList, wishList, readList, noneList, isLoading} = props;
+    const {
+        moveFromCurrentList,
+        moveFromWishList,
+        moveFromReadList,
+        addToLibrary } = props.actions;
     return (
         <div className="list-books">
             <div className="list-books-title">
@@ -33,6 +37,11 @@ const MyLibrary = (props) => {
                             books={ readList.books }
                             moveBookToAnotherShelf={ moveFromReadList }
                         />
+                        {noneList.books.length > 0 && <BookShelf
+                            shelf={ noneList.shelf }
+                            books={ noneList.books }
+                            moveBookToAnotherShelf={ addToLibrary }
+                        />}
                     </div>
                     {/*<div className="open-search">
                      <a onClick={() => this.setState({showSearchPage: true})}>Add a book</a>
