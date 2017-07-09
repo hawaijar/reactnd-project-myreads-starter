@@ -24,12 +24,7 @@ export default class SearchBook extends Component {
     };
     createMatchedBook = (book, index) => {
         book.authors = book.authors || [];
-        if(book.imageLinks) {
-            book.backgroundImage = book.imageLinks.thumbnail
-        }
-        else {
-            book.backgroundImage = '';
-        }
+
         if (book.shelf === categories.CURRENT[0]) {
             return (
                 <li key={ index }>
@@ -77,7 +72,7 @@ export default class SearchBook extends Component {
     };
 
     sync = (queryResult , library) => {
-        _.forEach(queryResult, function(book){
+        _.each(queryResult, function(book){
             let matchedBookFromLibrary = _.find(library, {'id': book.id});
             if (matchedBookFromLibrary !== undefined) {
                 book.shelf = categories.map[matchedBookFromLibrary.shelf];
@@ -89,9 +84,35 @@ export default class SearchBook extends Component {
 
     updateQuery = (event) => {
         const query = event.target.value;
+        if(query === ''){
+            this.setState({
+                queryResult: []
+            });
+            return;
+        }
         BooksAPI.search(query, 20)
             .then(books => {
-                books = books || [];
+                if(books === undefined || (books.error === 'empty query') ){
+                    this.setState({
+                        queryResult: []
+                    });
+                    return;
+                }
+
+                books = _.reduce(books, function(result, book){
+                    book.imageLinks = book.imageLinks || {thumbnail: ''};
+                    result.push({
+                        id: book.id,
+                        imageLinks: book.imageLinks,
+                        title: book.title,
+                        authors: book.authors,
+                        shelf: book.shelf
+                    });
+                    return result;
+                }, []);
+
+                // remove (any) duplicate books (by 'title')
+                books = _.uniqBy(books, 'title');
                 books = this.sync(books, this.state.library);
                 this.setState({
                     queryResult: books

@@ -3,7 +3,6 @@
  */
 import React from 'react'
 import BookShelf from './bookShelf';
-//import  Loader from 'halogen/PulseLoader';
 
 const MyLibrary = (props) => {
     const {currentList, wishList, readList, noneList, isLoading} = props;

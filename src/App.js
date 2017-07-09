@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import _ from 'lodash'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 //import {currentList, wishList, readList} from './test/bookData'
@@ -31,26 +32,50 @@ class BooksApp extends React.Component {
     componentDidMount(){
         BooksAPI.getAll()
             .then(books => {
-                let newCurrentList = {};
-                newCurrentList.books = books.filter(book => book.shelf === categories.CURRENT[0]);
-                newCurrentList.shelf = categories.CURRENT[1];
+                if(books){
+                    books = _.reduce(books, function(result, book){
+                       book.imageLinks = book.imageLinks || {thumbnail: ''};
+                        result.push({
+                            id: book.id,
+                            imageLinks: book.imageLinks,
+                            title: book.title,
+                            authors: book.authors,
+                            shelf: book.shelf
+                        });
+                        return result;
+                    }, []);
+                    let newCurrentList = {};
+                    newCurrentList.books = books.filter(book => book.shelf === categories.CURRENT[0]);
+                    newCurrentList.shelf = categories.CURRENT[1];
 
-                let newWishList = {};
-                newWishList.books = books.filter(book => book.shelf === categories.WISH[0]);
-                newWishList.shelf = categories.WISH[1];
+                    let newWishList = {};
+                    newWishList.books = books.filter(book => book.shelf === categories.WISH[0]);
+                    newWishList.shelf = categories.WISH[1];
 
-                let newReadList = {};
-                newReadList.books = books.filter(book => book.shelf === categories.READ[0]);
-                newReadList.shelf = categories.READ[1];
+                    let newReadList = {};
+                    newReadList.books = books.filter(book => book.shelf === categories.READ[0]);
+                    newReadList.shelf = categories.READ[1];
 
+                    this.setState({
+                        currentList: newCurrentList,
+                        wishList: newWishList,
+                        readList: newReadList,
+                        isLoading: false,
+                        books
+                    });
+                }
+            })
+            .catch(err => {
                 this.setState({
-                    currentList: newCurrentList,
-                    wishList: newWishList,
-                    readList: newReadList,
+                    currentList: [],
+                    wishList: [],
+                    readList: [],
                     isLoading: false,
-                    books
+                    books: []
                 });
-            });
+            })
+
+        ;
     }
     moveFromCurrentList(book, toShelf) {
         const title = book.title;
