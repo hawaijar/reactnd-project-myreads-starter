@@ -22,7 +22,7 @@ const DataFetcher = Wrapped => class DataFetcher extends Component {
     };
 
     componentDidMount() {
-        const { books, action, populateBooks } = this.props;
+        const { books, action, syncData } = this.props;
         switch (action) {
             case Constants.fetchActions.FETCH: {
                 BooksAPI.getAll()
@@ -45,7 +45,7 @@ const DataFetcher = Wrapped => class DataFetcher extends Component {
                                 data = this.reconcile(books, data);
                             }
                             else{
-                                populateBooks(data);
+                                syncData(data);
                             }
 
                             this.setState({

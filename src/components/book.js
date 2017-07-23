@@ -8,7 +8,6 @@ export default class Book extends Component {
     static  propTypes = {
         shelf: PropTypes.string.isRequired,
         book: PropTypes.object.isRequired,
-        moveBookToAnotherShelf: PropTypes.func.isRequired
     };
     static defaultProps = {
         book: {shelf: 'None'}
@@ -28,7 +27,7 @@ export default class Book extends Component {
     render() {
         const book = this.props.book;
         const {title, authors, imageLinks} = book;
-        let {shelf, moveBookToAnotherShelf} = this.props;
+        let {shelf} = this.props;
 
         return (
             <div className="book">
@@ -44,7 +43,7 @@ export default class Book extends Component {
                                     (e) => {
                                         const value = e.target.value;
                                         if (value !== shelf) {
-                                            moveBookToAnotherShelf(book, value);
+                                            //moveBookToAnotherShelf(book, value);
                                         }
                                     }
                                 }>
