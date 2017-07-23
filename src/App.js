@@ -5,7 +5,7 @@ import _ from 'lodash'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 //import {currentList, wishList, readList} from './test/bookData'
-import categories from './constant/bookTitles';
+import categories from './constant/index';
 import MyLibrary from './components/myLibrary';
 import SearchBook from './components/searchBook';
 

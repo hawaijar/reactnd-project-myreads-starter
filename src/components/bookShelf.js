@@ -5,7 +5,7 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import Book from './book';
-import categories from '../constant/bookTitles';
+import categories from '../constant/index';
 
 const BookShelf = (props) => {
     const {shelf, books, moveBookToAnotherShelf} = props;

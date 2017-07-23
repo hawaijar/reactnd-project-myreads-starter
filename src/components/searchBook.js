@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
 import _ from 'lodash';
 import { Throttle } from 'react-throttle';
-import categories from '../constant/bookTitles';
+import categories from '../constant/index';
 import Book from './book';
 import * as BooksAPI from '../BooksAPI';
 
