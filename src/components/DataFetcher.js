@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 import * as BooksAPI from '../BooksAPI'
 import * as Constants from '../constant';
+import Spinner from './Spinner';
 
 const DataFetcher = Wrapped => class DataFetcher extends Component {
     state = {
@@ -74,7 +75,7 @@ const DataFetcher = Wrapped => class DataFetcher extends Component {
         let component;
 
         if (this.state.loading) {
-            component = <div>Loading...</div>
+            component = <Spinner/>
         }
         else if (this.state.error !== null) {
             return <span>Error: {this.state.error.message}</span>;
