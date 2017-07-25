@@ -8,7 +8,7 @@ import Book from './book';
 import * as Constants from '../constant/index';
 
 const BookShelf = (props) => {
-    const {shelf, books} = props;
+    const {shelf, books, updateBook} = props;
     const title = "None (not in any shelf)";
     return (
         (books.length > 0) && <div className="bookshelf">
@@ -20,6 +20,7 @@ const BookShelf = (props) => {
                             <Book
                                 shelf={shelf}
                                 book={book}
+                                updateBook={updateBook}
                             />
                         </li>
                     ))}

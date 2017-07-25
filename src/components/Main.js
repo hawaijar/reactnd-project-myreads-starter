@@ -1,5 +1,6 @@
 import React from 'react'
 import {Route} from 'react-router-dom';
+import findIndex from 'lodash/findIndex'
 import MyLibrary from './myLibrary';
 import SearchPage from './SearchPage';
 import DataFetcher from './DataFetcher';
@@ -16,6 +17,7 @@ class Main extends React.Component {
     constructor() {
         super();
         this.updateState = this.updateState.bind(this);
+        this.updateBook = this.updateBook.bind(this);
     }
 
     updateState(state) {
@@ -23,6 +25,13 @@ class Main extends React.Component {
             books: state.books,
             isRefresh: state.isRefresh
         });
+    }
+    updateBook(book) {
+
+        let index = findIndex(this.state.books, {id: book.id});
+        let books = this.state.books;
+        books.splice(index, 1, book);
+        this.setState({books});
     }
 
     render() {
@@ -37,6 +46,7 @@ class Main extends React.Component {
                                 <MainPageComponent
                                     {...this.state}
                                     updateState={this.updateState}
+                                    updateBook={this.updateBook}
                                     action={Constants.fetchActions.FETCH}/>
                             </div>
                         );

@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react'
 import {PropTypes} from 'prop-types';
+import * as Constants from '../constant/index';
 
 export default class Book extends Component {
     static  propTypes = {
@@ -27,7 +28,7 @@ export default class Book extends Component {
     render() {
         const book = this.props.book;
         const {title, authors, imageLinks} = book;
-        let {shelf} = this.props;
+        let {shelf, updateBook} = this.props;
 
         return (
             <div className="book">
@@ -43,6 +44,8 @@ export default class Book extends Component {
                                     (e) => {
                                         const value = e.target.value;
                                         if (value !== shelf) {
+                                            book.shelf = Constants.categories.map[value];
+                                            updateBook(book);
                                             //moveBookToAnotherShelf(book, value);
                                         }
                                     }
