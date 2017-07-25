@@ -1,34 +1,30 @@
 import React, {Component} from 'react';
-import _ from 'lodash';
+import reduce from 'lodash/reduce';
+import uniqBy from 'lodash/uniqBy';
 import * as BooksAPI from '../BooksAPI'
 import * as Constants from '../constant';
 import Spinner from './Spinner';
 
+
 const DataFetcher = Wrapped => {
     class DataFetcher extends Component {
         state = {
-            isError: false
-        };
-        reconcile = (oldBooks, newBooks) => {
-            _.each(newBooks, (newBook) => {
-                // check if the newBook is already there. Update its latest status if required to.
-                let matchedBook = _.find(oldBooks, {'id': newBook.id});
-                if (!matchedBook) {
-                    newBook.status = matchedBook.status;
-                }
-            });
-            return newBooks;
+            isError: false,
+            error: null,
+            queryResult: []
         };
 
+
         componentDidMount() {
-            const {books, action, updateState, isRefresh} = this.props;
+            this.mounted = true;
+            const {action, updateState, isRefresh} = this.props;
             switch (action) {
                 case Constants.fetchActions.FETCH: {
                     if (!isRefresh) {
                         BooksAPI.getAll()
                             .then(data => {
                                 if (data) {
-                                    data = _.reduce(data, function (result, book) {
+                                    data = reduce(data, function (result, book) {
                                         book.imageLinks = book.imageLinks || {thumbnail: ''};
                                         result.push({
                                             id: book.id,
@@ -40,10 +36,6 @@ const DataFetcher = Wrapped => {
                                         return result;
                                     }, []);
 
-                                    // reconcile old(this.props.books) & new list of books
-                                    if (books.length > 0) {
-                                        data = this.reconcile(books, data);
-                                    }
                                     updateState({
                                         books: data,
                                         isRefresh: true
@@ -53,7 +45,7 @@ const DataFetcher = Wrapped => {
                             .catch(err => {
                                 console.log(err);
                                 this.setState({
-                                    books: [],
+                                    isError: true,
                                     error: err
                                 })
                             });
@@ -61,6 +53,47 @@ const DataFetcher = Wrapped => {
                     break;
                 }
                 case Constants.fetchActions.SEARCH: {
+                    const { searchTerm } = this.props;
+                    if(searchTerm === ''){
+                        return;
+                    }
+                    BooksAPI.search(searchTerm, 20)
+                        .then(books => {
+                            if(books === undefined || (books.error === 'empty query') ){
+                                this.setState({
+                                    queryResult: []
+                                });
+                                return;
+                            }
+
+                            books = reduce(books, function(result, book){
+                                book.imageLinks = book.imageLinks || {thumbnail: ''};
+                                result.push({
+                                    id: book.id,
+                                    imageLinks: book.imageLinks,
+                                    title: book.title,
+                                    authors: book.authors,
+                                    shelf: book.shelf
+                                });
+                                return result;
+                            }, []);
+
+                            // remove (any) duplicate books (by 'title')
+                            books = uniqBy(books, 'title');
+                            //books = this.sync(books, this.state.library);
+                            if(this.mounted) {
+                                this.setState({
+                                    queryResult: books
+                                })
+                            }
+                        })
+                        .catch(err => {
+                            this.setState({
+                                queryResult: []
+                            });
+                            console.log(err)
+                        });
+
                     break;
                 }
                 default:
@@ -77,9 +110,20 @@ const DataFetcher = Wrapped => {
                 return <span>Error: {this.state.error}</span>;
             }
             else {
-                component = <Wrapped {...this.props}/>
+                if(this.props.isSearch){
+                    component = <Wrapped
+                        updateSearchTerm={this.props.updateSearchTerm}
+                        searchTerm={this.props.searchTerm}
+                        queryResult={this.state.queryResult} />
+                }
+                else {
+                    component = <Wrapped {...this.props}/>
+                }
             }
             return component;
+        }
+        componentWillUnmount(){
+            this.mounted = false;
         }
     }
 

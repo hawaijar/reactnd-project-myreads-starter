@@ -1,9 +1,102 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
+import { Throttle } from 'react-throttle';
+import * as Constants from '../constant';
+import Book from './book';
 
-const SearchPage = (props) => {
-    return (
-        <div>Search page</div>
-    )
-};
+export default class SearchBook extends React.Component {
 
-export default SearchPage;
+    constructor(){
+        super();
+        this.updateQuery = this.updateQuery.bind(this);
+        this.createMatchedBook = this.createMatchedBook.bind(this);
+    }
+    updateQuery(e) {
+        this.props.updateSearchTerm(e.target.value);
+    }
+    componentWillReceiveProps(nextProps) {
+        // if(nextProps.searchTerm){
+        //     this.setState({
+        //         searchTerm: nextProps.searchTerm
+        //     })
+        // }
+    }
+    createMatchedBook(book, index){
+        book.authors = book.authors || [];
+        const updateBook = this.props.updateBook;
+
+        if (book.shelf === Constants.categories.CURRENT[0]) {
+            return (
+                <li key={ index }>
+                    <Book
+                        book={ book }
+                        updateBook={updateBook}
+                        shelf={ Constants.categories.CURRENT[1] }
+                    />
+                </li>
+            )
+        }
+        else if (book.shelf === Constants.categories.WISH[0]) {
+            return (
+                <li key={ index }>
+                    <Book
+                        book={ book }
+                        updateBook={updateBook}
+                        shelf={ Constants.categories.WISH[1] }
+                    />
+                </li>
+            )
+        }
+        else if (book.shelf === Constants.categories.READ[0]){
+            return (
+                <li key={ index }>
+                    <Book
+                        book={ book }
+                        updateBook={updateBook}
+                        shelf={ Constants.categories.READ[1] }
+                    />
+                </li>
+            )
+        }
+        else if (book.shelf === Constants.categories.NONE[0]){
+            return (
+                <li key={ index }>
+                    <Book
+                        book={ book }
+                        updateBook={updateBook}
+                        shelf={ Constants.categories.NONE[1] }
+                    />
+                </li>
+            )
+        }
+    }
+    reset = () => {
+        this.props.updateSearchTerm('');
+    };
+    render() {
+        const queryResult = this.props.queryResult;
+        return (
+            <div className="search-books">
+                <div className="search-books-bar">
+                    <Link className='close-search' to='/' onClick={this.reset}>Close</Link>
+                    <div className="search-books-input-wrapper">
+                        <Throttle time="200" handler="onChange">
+                            <input
+                                autoFocus
+                                type="text"
+                                placeholder="Search by title or author"
+                                value={this.props.searchTerm}
+                                onChange={this.updateQuery}
+                            />
+                        </Throttle>
+                    </div>
+                </div>
+                <div className="search-books-results">
+                    <ol className="books-grid">
+                        {queryResult.map(this.createMatchedBook)}
+                    </ol>
+                </div>
+            </div>
+        )
+    }
+}
