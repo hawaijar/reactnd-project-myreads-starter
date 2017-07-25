@@ -1,24 +1,28 @@
 import React from 'react'
 import {Route} from 'react-router-dom';
-import MainPage from './MainPage';
+import MyLibrary from './myLibrary';
 import SearchPage from './SearchPage';
 import DataFetcher from './DataFetcher';
 import * as Constants from '../constant';
 
 class Main extends React.Component {
-    constructor() {
-        super();
+    state = {
         // this is the single source of info (all books and their status)
         // from which the state of books displayed in the child components - Main and Search
         // shall depend on. Any events happened on child components shall update this global state.
-        this.store = {
-            books: []
-        };
-        this.syncData = this.syncData.bind(this);
+        books: [],
+        isRefresh: false
+    };
+    constructor() {
+        super();
+        this.updateState = this.updateState.bind(this);
     }
 
-    syncData(books) {
-        this.allBooks = books;
+    updateState(state) {
+        this.setState({
+            books: state.books,
+            isRefresh: state.isRefresh
+        });
     }
 
     render() {
@@ -27,12 +31,12 @@ class Main extends React.Component {
                 <Route exact path='/' render={
                     () => {
                         // Use the DataFetcher hoc to delegate the async operations
-                        let MainPageComponent = DataFetcher(MainPage);
+                        let MainPageComponent = DataFetcher(MyLibrary);
                         return (
                             <div className="data-component">
                                 <MainPageComponent
-                                    books={this.store.books}
-                                    syncData={this.syncData}
+                                    {...this.state}
+                                    updateState={this.updateState}
                                     action={Constants.fetchActions.FETCH}/>
                             </div>
                         );

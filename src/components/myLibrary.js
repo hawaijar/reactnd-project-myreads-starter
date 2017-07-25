@@ -3,15 +3,12 @@
  */
 import React from 'react'
 import BookShelf from './bookShelf';
+import * as Constants from '../constant';
 import '../App.css'
 
 const MyLibrary = (props) => {
-    const {currentList, wishList, readList, noneList} = props;
-    // const {
-    //     moveFromCurrentList,
-    //     moveFromWishList,
-    //     moveFromReadList,
-    //     addToLibrary } = props.actions;
+    const {books} = props;
+
     return (
         <div className="list-books">
             <div className="list-books-title">
@@ -20,23 +17,24 @@ const MyLibrary = (props) => {
                 <div className="list-books-content">
                     <div>
                         <BookShelf
-                            shelf={ currentList.shelf }
-                            books={ currentList.books }
+                            shelf={ Constants.categories.CURRENT[1] }
+                            books={ books.filter(book => book.shelf === Constants.categories.CURRENT[0]) }
                         />
 
                         <BookShelf
-                            shelf={ wishList.shelf }
-                            books={ wishList.books }
+                            shelf={ Constants.categories.WISH[1] }
+                            books={ books.filter(book => book.shelf === Constants.categories.WISH[0]) }
                         />
 
                         <BookShelf
-                            shelf={ readList.shelf }
-                            books={ readList.books }
+                            shelf={ Constants.categories.READ[1] }
+                            books={ books.filter(book => book.shelf === Constants.categories.READ[0]) }
                         />
-                        {noneList.books.length > 0 && <BookShelf
-                            shelf={ noneList.shelf }
-                            books={ noneList.books }
-                        />}
+                        <BookShelf
+                            shelf={ Constants.categories.NONE[1] }
+                            books={ books.filter(book => book.shelf === Constants.categories.NONE[0]) }
+                        />
+
                     </div>
              </div>
         </div>

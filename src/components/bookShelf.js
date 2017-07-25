@@ -11,7 +11,7 @@ const BookShelf = (props) => {
     const {shelf, books} = props;
     const title = "None (not in any shelf)";
     return (
-        <div className="bookshelf">
+        (books.length > 0) && <div className="bookshelf">
             <h2 className="bookshelf-title">{ shelf === Constants.categories.NONE[1]?title: shelf }</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
