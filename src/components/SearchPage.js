@@ -1,27 +1,30 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
-import { Throttle } from 'react-throttle';
+import {Throttle} from 'react-throttle';
 import * as Constants from '../constant';
 import Book from './book';
+import Spinner from './Spinner';
 
 export default class SearchBook extends React.Component {
 
-    constructor(){
+    state = {
+        isLoading: false
+    };
+
+    constructor() {
         super();
         this.updateQuery = this.updateQuery.bind(this);
         this.createMatchedBook = this.createMatchedBook.bind(this);
     }
+
     updateQuery(e) {
+        this.setState({
+            isLoading: true
+        });
         this.props.updateSearchTerm(e.target.value);
     }
-    componentWillReceiveProps(nextProps) {
-        // if(nextProps.searchTerm){
-        //     this.setState({
-        //         searchTerm: nextProps.searchTerm
-        //     })
-        // }
-    }
-    createMatchedBook(book, index){
+
+    createMatchedBook(book, index) {
         book.authors = book.authors || [];
         const updateBook = this.props.updateBook;
 
@@ -47,7 +50,7 @@ export default class SearchBook extends React.Component {
                 </li>
             )
         }
-        else if (book.shelf === Constants.categories.READ[0]){
+        else if (book.shelf === Constants.categories.READ[0]) {
             return (
                 <li key={ index }>
                     <Book
@@ -58,7 +61,7 @@ export default class SearchBook extends React.Component {
                 </li>
             )
         }
-        else if (book.shelf === Constants.categories.NONE[0]){
+        else if (book.shelf === Constants.categories.NONE[0]) {
             return (
                 <li key={ index }>
                     <Book
@@ -70,9 +73,11 @@ export default class SearchBook extends React.Component {
             )
         }
     }
+
     reset = () => {
-        this.props.updateSearchTerm('');
+        this.props.clearSearchTerm();
     };
+
     render() {
         const queryResult = this.props.queryResult;
         return (
@@ -93,7 +98,7 @@ export default class SearchBook extends React.Component {
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {queryResult.map(this.createMatchedBook)}
+                        { this.props.searchLoading ? <Spinner/> : queryResult.map(this.createMatchedBook)}
                     </ol>
                 </div>
             </div>

@@ -46,7 +46,6 @@ export default class Book extends Component {
                                         if (value !== shelf) {
                                             book.shelf = Constants.categories.map[value];
                                             updateBook(book);
-                                            //moveBookToAnotherShelf(book, value);
                                         }
                                     }
                                 }>
