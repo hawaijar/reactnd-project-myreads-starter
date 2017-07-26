@@ -2,7 +2,7 @@
  * Created by hawaijar on 7/4/17.
  */
 import React from 'react'
-import BookShelf from './bookShelf';
+import BookShelf from './BookShelf';
 import * as Constants from '../constant';
 import '../App.css'
 

@@ -4,7 +4,7 @@
 
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import Book from './book';
+import Book from './Book';
 import * as Constants from '../constant/index';
 
 const BookShelf = (props) => {

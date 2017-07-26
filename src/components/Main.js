@@ -1,7 +1,7 @@
 import React from 'react'
 import {Route, Link} from 'react-router-dom';
 import findIndex from 'lodash/findIndex'
-import MyLibrary from './myLibrary';
+import MyLibrary from './MyLibrary';
 import SearchPage from './SearchPage';
 import DataFetcher from './DataFetcher';
 import * as Constants from '../constant';

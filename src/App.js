@@ -6,8 +6,8 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 //import {currentList, wishList, readList} from './test/bookData'
 import categories from './constant/index';
-import MyLibrary from './components/myLibrary';
-import SearchBook from './components/searchBook';
+import MyLibrary from './components/MyLibrary';
+import SearchBook from './components/SearchBook';
 
 class BooksApp extends React.Component {
     state = {

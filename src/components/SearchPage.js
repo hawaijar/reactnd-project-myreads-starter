@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import {Throttle} from 'react-throttle';
 import * as Constants from '../constant';
-import Book from './book';
+import Book from './Book';
 import Spinner from './Spinner';
 
 export default class SearchBook extends React.Component {

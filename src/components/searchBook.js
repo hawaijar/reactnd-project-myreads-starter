@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import _ from 'lodash';
 import { Throttle } from 'react-throttle';
 import categories from '../constant/index';
-import Book from './book';
+import Book from './Book';
 import * as BooksAPI from '../BooksAPI';
 
 export default class SearchBook extends Component {

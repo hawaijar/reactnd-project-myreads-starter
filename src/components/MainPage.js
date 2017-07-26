@@ -1,6 +1,6 @@
 import React from 'react';
 import { shape, string, arrayOf } from 'prop-types';
-import MyLibrary from './myLibrary';
+import MyLibrary from './MyLibrary';
 
 const MainPage = (props) => {
     const {currentList, wishList, readList, noneList, syncData} = props;
