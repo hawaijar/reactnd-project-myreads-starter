@@ -7,6 +7,13 @@ import DataFetcher from './DataFetcher';
 import * as Constants from '../constant';
 import {update} from '../BooksAPI';
 
+/* For performance testing
+import Perf from 'react-addons-perf'
+window.Perf = Perf;
+Perf.start();
+*/
+
+
 class Main extends React.Component {
     state = {
         // this is the single source of info (all books and their status)
