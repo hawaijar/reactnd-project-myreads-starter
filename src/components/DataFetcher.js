@@ -37,6 +37,7 @@ const DataFetcher = Wrapped => {
                                 if (data) {
                                     data = reduce(data, function (result, book) {
                                         book.imageLinks = book.imageLinks || {thumbnail: ''};
+                                        book.authors = book.authors || [];
                                         result.push({
                                             id: book.id,
                                             imageLinks: book.imageLinks,
@@ -80,6 +81,7 @@ const DataFetcher = Wrapped => {
 
                                 books = reduce(books, function (result, book) {
                                     book.imageLinks = book.imageLinks || {thumbnail: ''};
+                                    book.authors = book.authors || [];
                                     result.push({
                                         id: book.id,
                                         imageLinks: book.imageLinks,
