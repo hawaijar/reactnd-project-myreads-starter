@@ -1,3 +1,12 @@
+// @flow
+type State = {
+  books: Array<Book>,
+  queryResult: Array<Book>,
+  searchTerm: string,
+  isRefresh: boolean,
+  searchLoading: boolean,
+};
+
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import findIndex from 'lodash/findIndex';
@@ -25,30 +34,21 @@ class Main extends React.Component {
     searchLoading: false,
   };
 
-  constructor() {
-    super();
-    this.updateState = this.updateState.bind(this);
-    this.updateBook = this.updateBook.bind(this);
-    this.updateSearchTerm = this.updateSearchTerm.bind(this);
-    this.updateStateFromSearch = this.updateStateFromSearch.bind(this);
-    this.clearSearchTerm = this.clearSearchTerm.bind(this);
-  }
-
-  updateState(state) {
+  updateState = (state: State) => {
     this.setState({
       books: state.books,
       isRefresh: state.isRefresh,
     });
-  }
+  };
 
-  updateStateFromSearch(state) {
+  updateStateFromSearch = (state: State) => {
     this.setState({
       queryResult: state.queryResult,
       searchLoading: state.searchLoading,
     });
-  }
+  };
 
-  updateBook(book) {
+  updateBook = (book: Book) => {
     let books = this.state.books;
     let index = findIndex(this.state.books, { id: book.id });
     if (index !== -1) {
@@ -65,14 +65,14 @@ class Main extends React.Component {
       books,
       searchLoading: false,
     });
-  }
+  };
 
-  updateSearchTerm(term) {
+  updateSearchTerm = (term: string) => {
     this.setState({
       searchTerm: term,
       searchLoading: true,
     });
-  }
+  };
 
   clearSearchTerm() {
     this.setState({
