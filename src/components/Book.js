@@ -1,17 +1,16 @@
 /**
  * Created by hawaijar on 7/4/17.
  */
+// @flow
+
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
+import { string, object } from 'prop-types';
 import * as Constants from '../constant/index';
 
 export default class Book extends Component {
   static propTypes = {
-    shelf: PropTypes.string.isRequired,
-    book: PropTypes.object.isRequired,
-  };
-  static defaultProps = {
-    book: { shelf: 'None' },
+    shelf: string.isRequired,
+    book: object.isRequired,
   };
 
   state = {
@@ -19,7 +18,7 @@ export default class Book extends Component {
     selectedBookId: '',
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     this.setState({
       book: nextProps.book,
     });

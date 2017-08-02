@@ -1,6 +1,7 @@
 /**
  * Created by hawaijar on 7/4/17.
  */
+// @flow
 const categories = {
   CURRENT: ['currentlyReading', 'Currently Reading'],
   WISH: ['wantToRead', 'Want to Read'],

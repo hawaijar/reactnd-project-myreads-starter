@@ -2,12 +2,19 @@
  * Created by hawaijar on 7/4/17.
  */
 
+// @flow
+type Props = {
+  shelf: string,
+  books: Array<BookType>,
+  updateBook: Function,
+};
+
 import React from 'react';
-import { PropTypes } from 'prop-types';
+import { string, array } from 'prop-types';
 import Book from './Book';
 import * as Constants from '../constant/index';
 
-const BookShelf = props => {
+const BookShelf = (props: Props) => {
   const { shelf, books, updateBook } = props;
   const title = 'None (not in any shelf)';
   return (
@@ -30,8 +37,8 @@ const BookShelf = props => {
 };
 
 BookShelf.propTypes = {
-  shelf: PropTypes.string.isRequired,
-  books: PropTypes.array.isRequired,
+  shelf: string.isRequired,
+  books: array.isRequired,
 };
 BookShelf.defaultProps = {
   shelf: '',

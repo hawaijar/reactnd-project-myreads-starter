@@ -1,7 +1,7 @@
 // @flow
 type State = {
-  books: Array<Book>,
-  queryResult: Array<Book>,
+  books: Array<BookType>,
+  queryResult: Array<BookType>,
   searchTerm: string,
   isRefresh: boolean,
   searchLoading: boolean,
@@ -48,7 +48,7 @@ class Main extends React.Component {
     });
   };
 
-  updateBook = (book: Book) => {
+  updateBook = (book: BookType) => {
     let books = this.state.books;
     let index = findIndex(this.state.books, { id: book.id });
     if (index !== -1) {

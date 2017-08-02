@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Throttle } from 'react-throttle';
@@ -10,21 +11,14 @@ export default class SearchBook extends React.Component {
     isLoading: false,
   };
 
-  constructor() {
-    super();
-    this.updateQuery = this.updateQuery.bind(this);
-    this.createMatchedBook = this.createMatchedBook.bind(this);
-  }
-
-  updateQuery(e) {
+  updateQuery = (e: SyntheticKeyboardEvent & { target: HTMLInputElement }) => {
     this.setState({
       isLoading: true,
     });
     this.props.updateSearchTerm(e.target.value);
-  }
+  };
 
-  createMatchedBook(book, index) {
-    book.authors = book.authors || [];
+  createMatchedBook = (book: Book, index: number) => {
     const updateBook = this.props.updateBook;
 
     if (book.shelf === Constants.categories.CURRENT[0]) {
@@ -68,7 +62,7 @@ export default class SearchBook extends React.Component {
         </li>
       );
     }
-  }
+  };
 
   reset = () => {
     this.props.clearSearchTerm();
