@@ -18,7 +18,7 @@ export default class SearchBook extends React.Component {
     this.props.updateSearchTerm(e.target.value);
   };
 
-  createMatchedBook = (book: Book, index: number) => {
+  createMatchedBook = (book: BookType, index: number) => {
     const updateBook = this.props.updateBook;
 
     if (book.shelf === Constants.categories.CURRENT[0]) {
