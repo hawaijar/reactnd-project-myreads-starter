@@ -3,22 +3,22 @@
  */
 // @flow
 
+type BookProps = {
+    shelf: string,
+    book: BookType
+}
+
 import React, { Component } from 'react';
-import { string, object } from 'prop-types';
 import * as Constants from '../constant/index';
 
 export default class Book extends Component {
-  static propTypes = {
-    shelf: string.isRequired,
-    book: object.isRequired,
-  };
 
   state = {
     book: {},
     selectedBookId: '',
   };
 
-  componentWillReceiveProps(nextProps: any) {
+  componentWillReceiveProps(nextProps: BookProps) {
     this.setState({
       book: nextProps.book,
     });

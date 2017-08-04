@@ -3,19 +3,17 @@
  */
 
 // @flow
-type Props = {
+type Props<T> = T & {
   shelf: string,
   books: Array<BookType>,
-  updateBook: Function,
-};
+  updateBook: (book: BookType) => void,
+}
 
 import React from 'react';
-import { string, array } from 'prop-types';
 import Book from './Book';
 import * as Constants from '../constant/index';
 
-const BookShelf = (props: Props) => {
-  const { shelf, books, updateBook } = props;
+function BookShelf<T: *>({shelf = '', books = [], updateBook}: Props<T>){
   const title = 'None (not in any shelf)';
   return (
     books.length > 0 &&
@@ -34,15 +32,6 @@ const BookShelf = (props: Props) => {
       </div>
     </div>
   );
-};
-
-BookShelf.propTypes = {
-  shelf: string.isRequired,
-  books: array.isRequired,
-};
-BookShelf.defaultProps = {
-  shelf: '',
-  books: [],
-};
+}
 
 export default BookShelf;
