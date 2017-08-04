@@ -4,15 +4,17 @@
 // @flow
 
 type BookProps = {
-    shelf: string,
-    book: BookType
-}
+  shelf: string,
+  book: BookType,
+};
 
 import React, { Component } from 'react';
 import * as Constants from '../constant/index';
 
 export default class Book extends Component {
-
+  static defaultProps = {
+    shelf: 'none',
+  };
   state = {
     book: {},
     selectedBookId: '',
@@ -37,7 +39,7 @@ export default class Book extends Component {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${imageLinks.thumbnail}`,
+              backgroundImage: `url(${imageLinks.thumbnail})`,
             }}
           >
             {true}

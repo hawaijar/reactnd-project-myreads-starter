@@ -8,11 +8,14 @@
     "react-throttle": "^0.3.0"
   },
   "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-enzyme": "^0.8.0",
     "enzyme": "^2.9.1",
     "flow-bin": "^0.51.1",
     "jest": "^20.0.4",
     "react-addons-perf": "^15.4.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "react-test-render": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
