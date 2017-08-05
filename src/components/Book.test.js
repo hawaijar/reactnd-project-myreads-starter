@@ -79,14 +79,16 @@ describe('Testing the Book component', () => {
       .to.have.text('None');
     chai.expect(component).to.have.props({ shelf: 'none' });
   });
-    test('Book shelf should be updated on change event', () => {
-        const spy = Sinon.spy();
-        let data = getBookSample();
-        const component = mount(
-            <Book shelf={data.shelf} book={data.book} updateBook={spy} />,
-        );
-        component.find('.book-shelf-changer select').simulate('change',{target: { value : 'None'}});
-        expect(spy.calledOnce).toBe(true);
-
-    });
+  test('Book shelf should be updated on change event', () => {
+    const spy = Sinon.spy();
+    let data = getBookSample();
+    const component = mount(
+      <Book shelf={data.shelf} book={data.book} updateBook={spy} />,
+    );
+    component
+      .find('.book-shelf-changer select')
+      .simulate('change', { target: { value: 'Want to Read' } });
+    expect(spy.calledOnce).toBe(true);
+    expect(spy.args[0][0]['shelf']).toBe('wantToRead');
+  });
 });
