@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow, render, mount } from 'enzyme';
-import chai from 'chai';
+import chai, { assert } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
+import Sinon from 'sinon';
 
 chai.use(chaiEnzyme());
 
@@ -78,13 +79,14 @@ describe('Testing the Book component', () => {
       .to.have.text('None');
     chai.expect(component).to.have.props({ shelf: 'none' });
   });
-    // test('Book shelf should be updated on change event', () => {
-    //     let data = getBookSample();
-    //     const component = mount(
-    //         <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
-    //     );
-    //     component.find('.book-shelf-changer select').simulate('change',{target: { value : 'None'}});
-    //     data.book.shelf = 'Reada';
-    //     chai.expect(component).to.have.prop('book').deep.equal(data.book);
-    // });
+    test('Book shelf should be updated on change event', () => {
+        const spy = Sinon.spy();
+        let data = getBookSample();
+        const component = mount(
+            <Book shelf={data.shelf} book={data.book} updateBook={spy} />,
+        );
+        component.find('.book-shelf-changer select').simulate('change',{target: { value : 'None'}});
+        expect(spy.calledOnce).toBe(true);
+
+    });
 });
