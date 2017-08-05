@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, render, mount } from 'enzyme';
 import chai from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 
@@ -46,22 +46,45 @@ describe('Testing the Book component', () => {
     const component = shallow(
       <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
     ).find('.book-title');
-    chai
-      .expect(component)
-      .to.have.text('The Linux Command Line');
+    chai.expect(component).to.have.text('The Linux Command Line');
   });
-    test('Book should be having the correct authors', () => {
-        const data = getBookSample();
-        const component = shallow(
-            <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
-        ).find('.book-authors');
-        chai
-            .expect(component.at(0))
-            .to.have.text('Alex Banks');
-        chai
-            .expect(component.at(1))
-            .to.have.text('Denzel Mayengbam');
-    });
-
-
+  test('Book should be having the correct authors', () => {
+    const data = getBookSample();
+    const component = shallow(
+      <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
+    ).find('.book-authors');
+    chai.expect(component.at(0)).to.have.text('Alex Banks');
+    chai.expect(component.at(1)).to.have.text('Denzel Mayengbam');
+  });
+  test('Book should be having the required drop-down containing all the available shelves', () => {
+    const data = getBookSample();
+    const component = mount(
+      <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
+    );
+    chai
+      .expect(component.find('.book-shelf-changer > select > option').at(0))
+      .to.have.text('Move to...');
+    chai
+      .expect(component.find('.book-shelf-changer > select > option').at(1))
+      .to.have.text('Currently Reading');
+    chai
+      .expect(component.find('.book-shelf-changer > select > option').at(2))
+      .to.have.text('Want to Read');
+    chai
+      .expect(component.find('.book-shelf-changer > select > option').at(3))
+      .to.have.text('Read');
+    chai
+      .expect(component.find('.book-shelf-changer > select > option').at(4))
+      .to.have.text('None');
+    chai.expect(component).to.have.props({ shelf: 'none' });
+  });
+    // test('Book shelf should be updated on change event', () => {
+    //     let data = getBookSample();
+    //     const component = mount(
+    //         <Book shelf={data.shelf} book={data.book} updateBook={data.updateBook} />,
+    //     );
+    //     component.find('.book-shelf-changer select').simulate('change',{target: { value : 'None'}});
+    //     data.book.shelf = 'Reada';
+    //     chai.expect(component).to.have.prop('book').deep.equal(data.book);
+    // });
 });
