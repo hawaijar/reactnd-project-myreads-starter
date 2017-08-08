@@ -8,7 +8,7 @@ chai.use(chaiEnzyme());
 
 import Book from './Book';
 
-describe('Testing the Book component', () => {
+xdescribe('Testing the Book component', () => {
   function getBookSample() {
     return {
       book: {

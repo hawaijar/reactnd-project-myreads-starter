@@ -31,6 +31,8 @@ export default class Book extends Component {
     const { title, authors, imageLinks } = book;
     let { shelf, updateBook } = this.props;
 
+    console.log(JSON.stringify(book))
+
     return (
       <div className="book">
         <div className="book-top">
