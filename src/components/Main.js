@@ -138,6 +138,7 @@ class Main extends React.Component {
             }}
           />
           {/*<Route component={FourOhFour} /> */}
+          {/* Redirect to home page for any non-matching paths */}
           <Redirect to="/" />
         </Switch>
       </div>
