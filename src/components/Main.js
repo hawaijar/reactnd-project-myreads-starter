@@ -8,7 +8,7 @@ type State = {
 };
 
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch, Redirect } from 'react-router-dom';
 import findIndex from 'lodash/findIndex';
 import MyLibrary from './MyLibrary';
 import SearchPage from './SearchPage';
@@ -89,52 +89,57 @@ class Main extends React.Component {
   };
 
   render() {
+    //const FourOhFour = () => <h1>404 - path not found</h1>;
     return (
       <div>
-        <Route
-          exact
-          path="/"
-          render={() => {
-            // Use the DataFetcher(hoc) to delegate the async operations
-            let MainPageComponent = DataFetcher(MyLibrary);
-            return (
-              <div className="data-component">
-                <MainPageComponent
-                  {...this.state}
-                  updateState={this.updateState}
-                  updateBook={this.updateBook}
-                  action={Constants.fetchActions.FETCH}
-                />
-                <div className="open-search">
-                  <Link to="/search" onClick={this.resetSearch}>
-                    Close
-                  </Link>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => {
+              // Use the DataFetcher(hoc) to delegate the async operations
+              let MainPageComponent = DataFetcher(MyLibrary);
+              return (
+                <div className="data-component">
+                  <MainPageComponent
+                    {...this.state}
+                    updateState={this.updateState}
+                    updateBook={this.updateBook}
+                    action={Constants.fetchActions.FETCH}
+                  />
+                  <div className="open-search">
+                    <Link to="/search" onClick={this.resetSearch}>
+                      Close
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            );
-          }}
-        />
+              );
+            }}
+          />
 
-        <Route
-          path="/search"
-          render={() => {
-            let SearchComponent = DataFetcher(SearchPage);
-            return (
-              <SearchComponent
-                queryResult={this.state.queryResult}
-                isSearch={true}
-                action={Constants.fetchActions.SEARCH}
-                searchTerm={this.state.searchTerm}
-                updateSearchTerm={this.updateSearchTerm}
-                clearSearchTerm={this.clearSearchTerm}
-                updateBook={this.updateBook}
-                updateStateFromSearch={this.updateStateFromSearch}
-                searchLoading={this.state.searchLoading}
-                books={this.state.books}
-              />
-            );
-          }}
-        />
+          <Route
+            path="/search"
+            render={() => {
+              let SearchComponent = DataFetcher(SearchPage);
+              return (
+                <SearchComponent
+                  queryResult={this.state.queryResult}
+                  isSearch={true}
+                  action={Constants.fetchActions.SEARCH}
+                  searchTerm={this.state.searchTerm}
+                  updateSearchTerm={this.updateSearchTerm}
+                  clearSearchTerm={this.clearSearchTerm}
+                  updateBook={this.updateBook}
+                  updateStateFromSearch={this.updateStateFromSearch}
+                  searchLoading={this.state.searchLoading}
+                  books={this.state.books}
+                />
+              );
+            }}
+          />
+          {/*<Route component={FourOhFour} /> */}
+          <Redirect to="/" />
+        </Switch>
       </div>
     );
   }

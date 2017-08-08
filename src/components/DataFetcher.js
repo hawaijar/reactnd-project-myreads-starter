@@ -42,6 +42,7 @@ const DataFetcher = (Wrapped: any) => {
                     function(result, book) {
                       book.imageLinks = book.imageLinks || { thumbnail: '' };
                       book.authors = book.authors || [];
+                      book.shelf = book.shelf || 'none';
                       result.push({
                         id: book.id,
                         imageLinks: book.imageLinks,
@@ -94,6 +95,7 @@ const DataFetcher = (Wrapped: any) => {
                   function(result, book) {
                     book.imageLinks = book.imageLinks || { thumbnail: '' };
                     book.authors = book.authors || [];
+                    book.shelf = book.shelf || 'none';
                     result.push({
                       id: book.id,
                       imageLinks: book.imageLinks,
