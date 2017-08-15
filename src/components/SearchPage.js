@@ -67,6 +67,11 @@ export default class SearchBook extends React.Component {
   reset = () => {
     this.props.clearSearchTerm();
   };
+  autoFocus = (e: SyntheticEvent & { target: { value: string } }) => {
+    let val = e.target.value;
+    e.target.value = '';
+    e.target.value = val;
+  };
 
   render() {
     const queryResult = this.props.queryResult;
@@ -79,10 +84,11 @@ export default class SearchBook extends React.Component {
           <div className="search-books-input-wrapper">
             <Throttle time="200" handler="onChange">
               <input
-                autoFocus
                 type="text"
                 placeholder="Search by title or author"
                 value={this.props.searchTerm}
+                autoFocus
+                onFocus={this.autoFocus}
                 onChange={this.updateQuery}
               />
             </Throttle>
