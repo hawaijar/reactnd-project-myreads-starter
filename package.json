@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "lodash": "^4.17.4",
+    "node-sass-chokidar": "^0.0.3",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -19,6 +20,8 @@
     "sinon": "^3.0.0"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest --coverage",

@@ -68,7 +68,7 @@ export default class SearchBook extends React.Component {
     this.props.clearSearchTerm();
   };
 
-  render() {
+  render(){
     const queryResult = this.props.queryResult;
     return (
       <div className="search-books">
@@ -79,8 +79,7 @@ export default class SearchBook extends React.Component {
           <div className="search-books-input-wrapper">
             <Throttle time="200" handler="onChange">
               <input
-                autoFocus
-                type="text"
+                  type="text"
                 placeholder="Search by title or author"
                 value={this.props.searchTerm}
                 onChange={this.updateQuery}

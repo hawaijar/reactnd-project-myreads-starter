@@ -96,7 +96,7 @@ class Main extends React.Component {
           <Route
             exact
             path="/"
-            render={() => {
+            component={() => {
               // Use the DataFetcher(hoc) to delegate the async operations
               let MainPageComponent = DataFetcher(MyLibrary);
               return (

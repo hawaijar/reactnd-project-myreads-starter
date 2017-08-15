@@ -1,10 +1,8 @@
 [ignore]
-<PROJECT_ROOT>/node_modules/react-throttle/*
 
 [include]
 
 [libs]
-react_throttle
 
 [options]
 

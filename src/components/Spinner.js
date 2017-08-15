@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Spinner = () =>
+const Spinner = props =>
   <div className="sk-fading-circle">
     <div className="sk-circle1 sk-circle" />
     <div className="sk-circle2 sk-circle" />

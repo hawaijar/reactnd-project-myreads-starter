@@ -5,7 +5,7 @@
 
 type BookProps = {
   shelf: string,
-  book: BookType,
+  book: BookType
 };
 
 import React, { Component } from 'react';
@@ -13,16 +13,16 @@ import * as Constants from '../constant/index';
 
 export default class Book extends Component {
   static defaultProps = {
-    shelf: 'none',
+    shelf: 'none'
   };
   state = {
     book: {},
-    selectedBookId: '',
+    selectedBookId: ''
   };
 
   componentWillReceiveProps(nextProps: BookProps) {
     this.setState({
-      book: nextProps.book,
+      book: nextProps.book
     });
   }
 
@@ -30,8 +30,6 @@ export default class Book extends Component {
     const book = this.props.book;
     const { title, authors, imageLinks } = book;
     let { shelf, updateBook } = this.props;
-
-    console.log(JSON.stringify(book))
 
     return (
       <div className="book">
@@ -41,7 +39,7 @@ export default class Book extends Component {
             style={{
               width: 128,
               height: 193,
-              backgroundImage: `url(${imageLinks.thumbnail})`,
+              backgroundImage: `url(${imageLinks.thumbnail})`
             }}
           >
             {true}
@@ -73,7 +71,7 @@ export default class Book extends Component {
         {authors.map(author =>
           <div key={author} className="book-authors">
             {author}
-          </div>,
+          </div>
         )}
       </div>
     );
