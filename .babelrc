@@ -7,8 +7,7 @@
       },
       //"debug": true,
       "modules": false, // don't tranform the modules. let Webpack take care of THAT!
-      "loose": false	// ignore the edge ES6/7 cases
     }]
-	],
+  ],
   "plugins": ["transform-class-properties"]	
 }

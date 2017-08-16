@@ -64,5 +64,15 @@
     },
     "jest": {
         "collectCoverageFrom": ["src/components/*.test.js"]
+    },
+
+    "scripts": {
+        "start": "webpack-dev-server",
+        "lint": "eslint",
+        "test": "jest --coverage",
+        "test:watch": "jest --watch"
+    },
+    "jest": {
+        "collectCoverageFrom": ["src/components/*.test.js"]
     }
 }
