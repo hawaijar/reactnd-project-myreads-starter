@@ -1,4 +1,14 @@
 {
-  "presets": ["react", "env"],
-  "plugins": ["transform-class-properties"]
+  "presets": [
+  	"react", // includes JSX, include flow transformation also
+  	["env", {
+      "targets": {
+        "browsers": "last 2 versions"	// target only the last 2 versions of browsers
+      },
+      //"debug": true,
+      "modules": false, // don't tranform the modules. let Webpack take care of THAT!
+      "loose": false	// ignore the edge ES6/7 cases
+    }]
+	],
+  "plugins": ["transform-class-properties"]	
 }
