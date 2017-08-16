@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
+import './App.scss';
 
 const App = () => {
 	return (
 		<div>
-			<h1>Hello React</h1>
+			<h1 className="title">Hello React</h1>
 		</div>
 	);
 };
