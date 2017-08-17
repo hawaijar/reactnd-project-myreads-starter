@@ -2,7 +2,6 @@
  * Created by hawaijar on 7/4/17.
  */
 
-// @flow
 type Props<T> = T & {
   shelf: string,
   books: Array<BookType>,

@@ -1,4 +1,3 @@
-// @flow
 type State = {
   books: Array<BookType>,
   queryResult: Array<BookType>,

@@ -3,32 +3,48 @@ import reduce from 'lodash/reduce';
 import uniqBy from 'lodash/uniqBy';
 import each from 'lodash/each';
 import find from 'lodash/find';
+import { string, boolean, Function, shape, arrayOf } from 'prop-types';
 import * as BooksAPI from '../BooksAPI';
 import * as Constants from '../constant';
 import Spinner from './Spinner';
 
 const DataFetcher = Wrapped => {
   class DataFetcherComponent extends Component {
-    constructor(props) {
-      super(props);
-      this.mounted = false;
-      this.state = {
-        isError: false,
-        error: null,
-        queryResult: []
-      };
-      this.sync = this.sync.bind(this);
-    }
+    static propTypes = {
+      action: string,
+      isRefresh: boolean,
+      updateState: Function,
+      searchTerm: string,
+      searchLoading: string,
+      updateStateFromSearch: Function,
+      books: arrayOf(
+        shape({
+          id: string,
+          imageLinks: shape({
+            thmubnail: string
+          }),
+          title: string,
+          authors: arrayOf(string),
+          shelf: string
+        })
+      )
+    };
 
-    sync(storeBooks, searchResultBooks) {
-      each(searchResultBooks, function(book) {
-        let matchedBookFromLibrary = find(storeBooks, { id: book.id });
-        if (matchedBookFromLibrary !== undefined) {
-          book.shelf = matchedBookFromLibrary.shelf;
-        }
-      });
-      return searchResultBooks;
-    }
+    static defaultProps = {
+      action: Constants.fetchActions.FETCH,
+      isRefresh: true,
+      updateState: f => f,
+      searchTerm: '',
+      searchLoading: false,
+      updateStateFromSearch: f => f,
+      books: []
+    };
+
+    state = {
+      isError: false,
+      error: null,
+      queryResult: []
+    };
 
     componentDidMount() {
       this.mounted = true;
@@ -38,19 +54,23 @@ const DataFetcher = Wrapped => {
           if (!isRefresh) {
             BooksAPI.getAll()
               .then(data => {
+                /* eslint-disable no-param-reassign */
                 if (data) {
                   data = reduce(
                     data,
-                    function(result, book) {
-                      book.imageLinks = book.imageLinks || { thumbnail: '' };
-                      book.authors = book.authors || [];
-                      book.shelf = book.shelf || 'none';
+                    (result, book) => {
+                      const objPropperties = {
+                        imageLinks: book.imageLinks || { thumbnail: '' },
+                        authors: book.authors || [],
+                        shelf: book.shelf || 'none'
+                      };
+                      const newBook = { ...book, objPropperties };
                       result.push({
-                        id: book.id,
-                        imageLinks: book.imageLinks,
-                        title: book.title,
-                        authors: book.authors,
-                        shelf: book.shelf || 'None'
+                        id: newBook.id,
+                        imageLinks: newBook.imageLinks,
+                        title: newBook.title,
+                        authors: newBook.authors,
+                        shelf: newBook.shelf || 'None'
                       });
                       return result;
                     },
@@ -64,7 +84,8 @@ const DataFetcher = Wrapped => {
                 }
               })
               .catch(err => {
-                console.log(err); /* eslint-disable no-console */
+                /* eslint-disable no-console */
+                console.log(err);
                 this.setState({
                   isError: true,
                   error: err
@@ -90,7 +111,7 @@ const DataFetcher = Wrapped => {
 
                 books = reduce(
                   books,
-                  function(result, book) {
+                  (result, book) => {
                     book.imageLinks = book.imageLinks || { thumbnail: '' };
                     book.authors = book.authors || [];
                     book.shelf = book.shelf || 'none';
@@ -166,6 +187,16 @@ const DataFetcher = Wrapped => {
     componentWillUnmount() {
       this.mounted = false;
     }
+    mounted = false;
+    sync = (storeBooks, searchResultBooks) => {
+      each(searchResultBooks, function(book) {
+        let matchedBookFromLibrary = find(storeBooks, { id: book.id });
+        if (matchedBookFromLibrary !== undefined) {
+          book.shelf = matchedBookFromLibrary.shelf;
+        }
+      });
+      return searchResultBooks;
+    };
   }
 
   return DataFetcherComponent;

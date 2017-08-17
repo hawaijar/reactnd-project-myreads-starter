@@ -1,9 +1,13 @@
 [ignore]
+<PROJECT_ROOT>/node_modules/styled-components/*
 
 [include]
 
 [libs]
 
 [options]
-
-[lints]
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+module.file_ext=.css
+module.file_ext=.scss

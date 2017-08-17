@@ -1,7 +1,6 @@
 /**
  * Created by hawaijar on 7/4/17.
  */
-// @flow
 
 type BookProps = {
   shelf: string,
