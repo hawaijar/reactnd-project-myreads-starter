@@ -1,5 +1,10 @@
-import React from 'react';
+// @flow
+import React, { Component } from 'react';
 
-const Main = () => <h1>Hello React! </h1>;
+class Main extends Component {
+	render() {
+		return <div>Hello React/Redux!</div>;
+	}
+}
 
 export default Main;
