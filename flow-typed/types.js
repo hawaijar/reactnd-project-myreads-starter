@@ -1,6 +1,6 @@
-declare type BookType = {
+export type BookType = {
 	id: string,
-	imageLinks: string,
+	thumbnail: string,
 	title: string,
 	authors?: Array<string>,
 	shelf: string
