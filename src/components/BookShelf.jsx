@@ -12,9 +12,9 @@ const BookShelf = ({ books, shelf }) => {
       </h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
-          {books.map((book, index) =>
+          {books.map(book =>
             <li key={book.title}>
-              <Book {...book} />
+              <Book book={book} />
             </li>
           )}
         </ol>

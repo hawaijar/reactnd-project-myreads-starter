@@ -35,8 +35,7 @@ const Library = ({ books }) => {
 
 function mapStateToProps(state, ownProps) {
 	return {
-		books: state.mainPageBooks
+		books: Object.values(state.mainPageBooks)
 	};
 }
-
 export default connect(mapStateToProps)(Library);

@@ -1,7 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import * as Constants from '../constant';
+import { updateBook } from '../actions';
 
-const Book = ({ title, authors, thumbnail, shelf }) => {
+const Book = ({ dispatch, book }) => {
+	function handleUpdate(event, book) {
+		book.shelf = event.target.value;
+		dispatch(updateBook(book));
+	}
 	return (
 		<div className="book">
 			<div className="book-top">
@@ -10,13 +16,13 @@ const Book = ({ title, authors, thumbnail, shelf }) => {
 					style={{
 						width: 128,
 						height: 193,
-						backgroundImage: `url(${thumbnail})`
+						backgroundImage: `url(${book.thumbnail})`
 					}}
 				>
 					{true}
 				</div>
 				<div className="book-shelf-changer">
-					<select value={shelf} onChange={e => e}>
+					<select value={book.shelf} onChange={e => handleUpdate(e, book)}>
 						<option value="default" disabled>
 							Move to...
 						</option>
@@ -28,9 +34,9 @@ const Book = ({ title, authors, thumbnail, shelf }) => {
 				</div>
 			</div>
 			<div className="book-title">
-				{title}
+				{book.title}
 			</div>
-			{authors.map(author =>
+			{book.authors.map(author =>
 				<div key={author} className="book-authors">
 					{author}
 				</div>
@@ -38,5 +44,12 @@ const Book = ({ title, authors, thumbnail, shelf }) => {
 		</div>
 	);
 };
+// const mapDispatchToProps = dispatch => {
+// 	return {
+// 		handleUpdate(dispatch, book) {
+// 			dispatch(updateBook(book));
+// 		}
+// 	};
+// };
 
-export default Book;
+export default connect()(Book);
