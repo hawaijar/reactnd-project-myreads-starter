@@ -1,41 +1,75 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BookShelf from './BookShelf';
+import Spinner from './Spinner';
 import * as Constants from '../constant';
+import { getData } from '../actions';
 import '../App.scss';
 
-const Library = ({ books }) => {
-	function createBooks(books, targetShelf) {
+class Library extends Component {
+	createBooks = (books, targetShelf) => {
 		return books.filter(book => book.shelf === targetShelf);
+	};
+	componentDidMount() {
+		this.props.populateBooks();
 	}
-	return (
-		<div className="list-books">
-			<div className="list-books-title">
-				<h1>MyReads</h1>
-			</div>
-			<div className="list-books-content">
-				<div>
-					<BookShelf
-						shelf={Constants.categories.CURRENT[1]}
-						books={createBooks(books, Constants.categories.CURRENT[1])}
-					/>
-					<BookShelf
-						shelf={Constants.categories.WISH[1]}
-						books={createBooks(books, Constants.categories.WISH[1])}
-					/>
-					<BookShelf
-						shelf={Constants.categories.READ[1]}
-						books={createBooks(books, Constants.categories.READ[1])}
-					/>
+	render() {
+		const { books } = this.props;
+		let component;
+		if (this.props.isMainPageLoaded) {
+			component = (
+				<div className="list-books">
+					<div className="list-books-title">
+						<h1>MyReads</h1>
+					</div>
+					<div className="list-books-content">
+						<div>
+							<BookShelf
+								shelf={Constants.categories.CURRENT[1]}
+								books={this.createBooks(books, Constants.categories.CURRENT[1])}
+							/>
+							<BookShelf
+								shelf={Constants.categories.WISH[1]}
+								books={this.createBooks(books, Constants.categories.WISH[1])}
+							/>
+							<BookShelf
+								shelf={Constants.categories.READ[1]}
+								books={this.createBooks(books, Constants.categories.READ[1])}
+							/>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	);
-};
+			);
+		} else if (this.props.hasErrorMainPage.isError) {
+			component = (
+				<div>
+					<h2>Error in fetching data from the API</h2>
+					<pre>
+						<code>
+							{JSON.stringify(this.props.hasErrorMainPage.errorMsg, null, 2)}
+						</code>
+					</pre>
+				</div>
+			);
+		} else {
+			component = <Spinner />;
+		}
+		return component;
+	}
+}
 
 function mapStateToProps(state, ownProps) {
 	return {
-		books: Object.values(state.mainPageBooks)
+		books: Object.values(state.mainPageBooks),
+		isMainPageLoaded: state.isMainPageLoaded,
+		hasErrorMainPage: state.hasErrorMainPage
 	};
 }
-export default connect(mapStateToProps)(Library);
+function mapDispatchToProps(dispatch) {
+	return {
+		populateBooks() {
+			dispatch(getData());
+		}
+	};
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Library);

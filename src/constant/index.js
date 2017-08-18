@@ -3,6 +3,14 @@
  */
 // @flow
 const categories = {
+	currentlyReading: 'Currently Reading',
+	'Currently Reading': 'currentlyReading',
+	wantToRead: 'Want to Read',
+	'Want to Read': 'wantToRead',
+	Read: 'read',
+	read: 'Read',
+	None: 'none',
+	none: 'None',
 	CURRENT: ['currentlyReading', 'Currently Reading'],
 	WISH: ['wantToRead', 'Want to Read'],
 	READ: ['read', 'Read'],
