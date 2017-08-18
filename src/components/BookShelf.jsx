@@ -2,7 +2,7 @@ import React from 'react';
 import Book from './Book';
 import * as Constants from '../constant';
 
-const BookShelf = ({ books, shelf }) => {
+const BookShelf = ({ children: books, shelf }) => {
   const title = 'None (not in any shelf)';
   return (
     books.length > 0 &&

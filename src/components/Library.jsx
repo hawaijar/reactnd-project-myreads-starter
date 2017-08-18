@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import BookShelf from './BookShelf';
 import Spinner from './Spinner';
 import * as Constants from '../constant';
@@ -24,19 +25,19 @@ class Library extends Component {
 					</div>
 					<div className="list-books-content">
 						<div>
-							<BookShelf
-								shelf={Constants.categories.CURRENT[1]}
-								books={this.createBooks(books, Constants.categories.CURRENT[1])}
-							/>
-							<BookShelf
-								shelf={Constants.categories.WISH[1]}
-								books={this.createBooks(books, Constants.categories.WISH[1])}
-							/>
-							<BookShelf
-								shelf={Constants.categories.READ[1]}
-								books={this.createBooks(books, Constants.categories.READ[1])}
-							/>
+							<BookShelf shelf={Constants.categories.CURRENT[1]}>
+								{this.createBooks(books, Constants.categories.CURRENT[1])}
+							</BookShelf>
+							<BookShelf shelf={Constants.categories.WISH[1]}>
+								{this.createBooks(books, Constants.categories.WISH[1])}
+							</BookShelf>
+							<BookShelf shelf={Constants.categories.READ[1]}>
+								{this.createBooks(books, Constants.categories.READ[1])}
+							</BookShelf>
 						</div>
+					</div>
+					<div className="open-search">
+						<Link to="/search">Close</Link>
 					</div>
 				</div>
 			);
