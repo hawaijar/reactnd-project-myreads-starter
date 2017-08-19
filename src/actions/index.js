@@ -36,7 +36,7 @@ export function updateSearchPageBooks(books) {
 		payload: books
 	};
 }
-/*
+
 export function updateisLoadedSearchPageBooks(flag) {
 	return {
 		type: ISLOADED_SEARCHPAGE,
@@ -52,7 +52,6 @@ export function updatehasErrorSearchPageBooks(flag, error) {
 		}
 	};
 }
-*/
 
 export function updateSearchTerm(term) {
 	return {
@@ -82,12 +81,15 @@ export function getSearchData(query) {
 		if (query === '') {
 			dispatch(updateSearchPageBooks([]));
 		} else {
+			dispatch(updateisLoadedSearchPageBooks(true));
 			BooksAPI.search(query)
 				.then(data => {
 					dispatch(updateSearchPageBooks(data));
+					dispatch(updateisLoadedSearchPageBooks(false));
 				})
 				.catch(() => {
 					dispatch(updateSearchPageBooks([]));
+					dispatch(updateisLoadedSearchPageBooks(false));
 				});
 		}
 	};

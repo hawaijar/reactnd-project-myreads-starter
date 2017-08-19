@@ -27,12 +27,25 @@ class SearchPage extends Component {
     });
     this.props.dispatchInputChange(val);
   };
+  reset = () => {
+    this.props.dispatchInputChange('');
+  };
   render() {
-    const { books } = this.props;
+    const { books, isLoadingSearchPage } = this.props;
+    let component;
+    if (isLoadingSearchPage) {
+      component = <Spinner />;
+    } else {
+      component = (
+        <ol className="books-grid">
+          {this.createBooks(books)}
+        </ol>
+      );
+    }
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link className="close-search" to="/">
+          <Link className="close-search" to="/" onClick={this.reset}>
             Close
           </Link>
           <div className="search-books-input-wrapper">
@@ -46,9 +59,7 @@ class SearchPage extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {this.createBooks(books)}
-          </ol>
+          {component}
         </div>
       </div>
     );
@@ -57,7 +68,8 @@ class SearchPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    books: Object.values(state.searchPageBooks)
+    books: Object.values(state.searchPageBooks),
+    isLoadingSearchPage: state.isLoadingSearchPage
   };
 };
 

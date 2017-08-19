@@ -5,7 +5,8 @@ import {
 	UPDATE_BOOK,
 	ISLOADED_MAINPAGE,
 	HASERROR_MAINPAGE,
-	UPDATE_SEARCHPAGE_BOOKS
+	UPDATE_SEARCHPAGE_BOOKS,
+	ISLOADED_SEARCHPAGE
 } from '../actions';
 
 /* eslint-disable no-useless-computed-key */
@@ -101,10 +102,18 @@ const searchPageBooks = (state = {}, action) => {
 	return state;
 };
 
+const isLoadingSearchPage = (state = false, action) => {
+	if (action.type === ISLOADED_SEARCHPAGE) {
+		return action.payload;
+	}
+	return state;
+};
+
 const rootReducer = combineReducers({
 	mainPageBooks,
 	isMainPageLoaded,
 	hasErrorMainPage,
-	searchPageBooks
+	searchPageBooks,
+	isLoadingSearchPage
 });
 export default rootReducer;
