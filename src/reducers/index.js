@@ -2,16 +2,14 @@ import { combineReducers } from 'redux';
 import { categories } from '../constant';
 import {
 	UPDATE_MAINPAGE_BOOKS,
-	UPDATE_SEARCHPAGE_BOOKS,
-	UPDATE_SEARCHTERM,
 	UPDATE_BOOK,
 	ISLOADED_MAINPAGE,
 	HASERROR_MAINPAGE,
-	ISLOADED_SEARCHPAGE,
-	HASERROR_SEARCHPAGE
+	UPDATE_SEARCHPAGE_BOOKS
 } from '../actions';
 
 /* eslint-disable no-useless-computed-key */
+/*
 const initialState = {
 	['To Kill a Mockingbird']: {
 		title: 'To Kill a Mockingbird',
@@ -35,8 +33,9 @@ const initialState = {
 		shelf: 'Read'
 	}
 };
+*/
 
-const mainPageBooks = (state = initialState, action) => {
+const mainPageBooks = (state = {}, action) => {
 	if (action.type === UPDATE_MAINPAGE_BOOKS) {
 		const data = action.payload;
 		let books = {};
@@ -61,18 +60,7 @@ const mainPageBooks = (state = initialState, action) => {
 	}
 	return state;
 };
-const searchPageBooks = (state = [], action) => {
-	if (action.type === UPDATE_SEARCHPAGE_BOOKS) {
-		return action.payload;
-	}
-	return state;
-};
-const searchTerm = (state = '', action) => {
-	if (action.type === UPDATE_SEARCHTERM) {
-		return action.payload;
-	}
-	return state;
-};
+
 const isMainPageLoaded = (state = false, action) => {
 	if (action.type === ISLOADED_MAINPAGE) {
 		return action.payload;
@@ -85,16 +73,31 @@ const hasErrorMainPage = (state = { isError: false, errorMsg: '' }, action) => {
 	}
 	return state;
 };
-const isSearchPageLoaded = (state = false, action) => {
-	if (action.type === ISLOADED_SEARCHPAGE) {
-		return action.payload;
+const searchPageBooks = (state = {}, action) => {
+	if (action.type === UPDATE_SEARCHPAGE_BOOKS) {
+		const data = action.payload;
+		let books = {};
+		/* eslint-disable no-shadow */
+		books = data.reduce((books, rawBook) => {
+			const book = {
+				title: rawBook.title,
+				authors: rawBook.authors,
+				thumbnail: rawBook.imageLinks ? rawBook.imageLinks.thumbnail : '',
+				shelf: rawBook.shelf in categories ? categories[rawBook.shelf] : 'None'
+			};
+			/* eslint-disable no-param-reassign */
+			books[`${book.title}`] = book;
+			return books;
+		}, {});
+
+		return books;
 	}
-	return state;
-};
-const hasErrorSearchPage = (state = false, action) => {
-	if (action.type === HASERROR_SEARCHPAGE) {
-		return action.payload;
+	/*
+	if (action.type === UPDATE_BOOK) {
+		const updatedBook = action.payload;
+		return { ...state, [updatedBook.title]: updatedBook };
 	}
+	*/
 	return state;
 };
 
@@ -102,9 +105,6 @@ const rootReducer = combineReducers({
 	mainPageBooks,
 	isMainPageLoaded,
 	hasErrorMainPage,
-	searchPageBooks,
-	isSearchPageLoaded,
-	hasErrorSearchPage,
-	searchTerm
+	searchPageBooks
 });
 export default rootReducer;
