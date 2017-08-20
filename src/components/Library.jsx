@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import BookShelf from './BookShelf';
 import Spinner from './Spinner';
 import * as Constants from '../constant';
-import { getData } from '../actions';
+import { getBooksFromAPI } from '../actions';
 import '../App.scss';
 
 class Library extends Component {
@@ -12,12 +12,29 @@ class Library extends Component {
     return books.filter(book => book.shelf === targetShelf);
   };
   componentDidMount() {
-    this.props.populateBooks();
+    /* eslint-disable no-console */
+    console.log(this.props.books);
+    if (this.props.books.length === 0) {
+      this.props.populateBooks();
+    }
   }
   render() {
     const { books } = this.props;
     let component;
-    if (this.props.isMainPageLoaded) {
+    if (this.props.hasErroredMainPage) {
+      component = (
+        <div>
+          <h2>Error in fetching data from the API</h2>
+          <pre>
+            <code>
+              {JSON.stringify(this.props.hasErrorMainPage.errorMsg, null, 2)}
+            </code>
+          </pre>
+        </div>
+      );
+    } else if (this.props.isMainPageLoading) {
+      component = <Spinner />;
+    } else {
       component = (
         <div className="list-books">
           <div className="list-books-title">
@@ -41,20 +58,8 @@ class Library extends Component {
           </div>
         </div>
       );
-    } else if (this.props.hasErrorMainPage.isError) {
-      component = (
-        <div>
-          <h2>Error in fetching data from the API</h2>
-          <pre>
-            <code>
-              {JSON.stringify(this.props.hasErrorMainPage.errorMsg, null, 2)}
-            </code>
-          </pre>
-        </div>
-      );
-    } else {
-      component = <Spinner />;
     }
+
     return component;
   }
 }
@@ -62,15 +67,15 @@ class Library extends Component {
 function mapStateToProps(state, ownProps) {
   return {
     books: Object.values(state.mainPageBooks),
-    isMainPageLoaded: state.isMainPageLoaded,
-    hasErrorMainPage: state.hasErrorMainPage,
+    isMainPageLoading: state.isMainPageLoading,
+    hasErroredMainPage: state.hasErroredMainPage
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
     populateBooks() {
-      dispatch(getData());
-    },
+      dispatch(getBooksFromAPI());
+    }
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Library);

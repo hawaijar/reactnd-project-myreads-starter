@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { categories } from '../constant';
 import {
-	UPDATE_MAINPAGE_BOOKS,
+	UPDATE_MAINPAGE,
 	UPDATE_BOOK,
-	ISLOADED_MAINPAGE,
-	HASERROR_MAINPAGE,
+	MAINPAGE_IS_LOADING,
+	MAINPAGE_HAS_ERRORED,
 	UPDATE_SEARCHPAGE_BOOKS,
 	ISLOADED_SEARCHPAGE
 } from '../actions';
@@ -37,7 +37,7 @@ const initialState = {
 */
 
 const mainPageBooks = (state = {}, action) => {
-	if (action.type === UPDATE_MAINPAGE_BOOKS) {
+	if (action.type === UPDATE_MAINPAGE) {
 		const data = action.payload;
 		let books = {};
 		/* eslint-disable no-shadow */
@@ -57,19 +57,21 @@ const mainPageBooks = (state = {}, action) => {
 	}
 	if (action.type === UPDATE_BOOK) {
 		const updatedBook = action.payload;
-		return { ...state, [updatedBook.title]: updatedBook };
+		if (Object.values(state).find(book => book.title === updatedBook.title)) {
+			return { ...state, [updatedBook.title]: updatedBook };
+		}
 	}
 	return state;
 };
 
-const isMainPageLoaded = (state = false, action) => {
-	if (action.type === ISLOADED_MAINPAGE) {
+const isMainPageLoading = (state = false, action) => {
+	if (action.type === MAINPAGE_IS_LOADING) {
 		return action.payload;
 	}
 	return state;
 };
-const hasErrorMainPage = (state = { isError: false, errorMsg: '' }, action) => {
-	if (action.type === HASERROR_MAINPAGE) {
+const hasErroredMainPage = (state = false, action) => {
+	if (action.type === MAINPAGE_HAS_ERRORED) {
 		return action.payload;
 	}
 	return state;
@@ -93,12 +95,14 @@ const searchPageBooks = (state = {}, action) => {
 
 		return books;
 	}
-	/*
+
 	if (action.type === UPDATE_BOOK) {
 		const updatedBook = action.payload;
-		return { ...state, [updatedBook.title]: updatedBook };
+		if (Object.values(state).find(book => book.title === updatedBook.title)) {
+			return { ...state, [updatedBook.title]: updatedBook };
+		}
 	}
-	*/
+
 	return state;
 };
 
@@ -111,8 +115,8 @@ const isLoadingSearchPage = (state = false, action) => {
 
 const rootReducer = combineReducers({
 	mainPageBooks,
-	isMainPageLoaded,
-	hasErrorMainPage,
+	isMainPageLoading,
+	hasErroredMainPage,
 	searchPageBooks,
 	isLoadingSearchPage
 });

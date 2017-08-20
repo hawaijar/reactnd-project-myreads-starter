@@ -1,33 +1,30 @@
 import * as BooksAPI from '../BooksAPI';
 
-export const UPDATE_MAINPAGE_BOOKS = 'UPDATE_MAINPAGE_BOOKS';
+export const UPDATE_MAINPAGE = 'UPDATE_MAINPAGE';
+export const MAINPAGE_IS_LOADING = 'MAINPAGE_IS_LOADING';
+export const MAINPAGE_HAS_ERRORED = 'MAINPAGE_HAS_ERRORED';
 export const UPDATE_SEARCHPAGE_BOOKS = 'UPDATE_SEARCHPAGE_BOOKS';
 export const UPDATE_SEARCHTERM = 'UPDATE_SEARCHTERM';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
-export const ISLOADED_MAINPAGE = 'ISLOADED_MAINPAGE';
-export const HASERROR_MAINPAGE = 'HASERROR_MAINPAGE';
 export const ISLOADED_SEARCHPAGE = 'ISLOADED_SEARCHPAGE';
 export const HASERROR_SEARCHPAGE = 'HASERROR_SEARCHPAGE';
 
-export function updateMainPageBooks(books) {
+export function updateMainPage(books) {
 	return {
-		type: UPDATE_MAINPAGE_BOOKS,
+		type: UPDATE_MAINPAGE,
 		payload: books
 	};
 }
-export function updateisLoadedMainPageBooks(flag) {
+export function mainPageIsLoading(flag) {
 	return {
-		type: ISLOADED_MAINPAGE,
+		type: MAINPAGE_IS_LOADING,
 		payload: flag
 	};
 }
-export function updatehasErrorMainPageBooks(flag, error) {
+export function mainPageHasErrored(flag) {
 	return {
-		type: HASERROR_MAINPAGE,
-		payload: {
-			isError: flag,
-			errorMsg: error
-		}
+		type: MAINPAGE_HAS_ERRORED,
+		payload: flag
 	};
 }
 export function updateSearchPageBooks(books) {
@@ -65,14 +62,15 @@ export function updateBook(book) {
 		payload: book
 	};
 }
-export function getData() {
+export function getBooksFromAPI() {
 	return dispatch => {
+		dispatch(mainPageIsLoading(true));
 		BooksAPI.getAll()
 			.then(data => {
-				dispatch(updateMainPageBooks(data));
-				dispatch(updateisLoadedMainPageBooks(true));
+				dispatch(updateMainPage(data));
+				dispatch(mainPageIsLoading(false));
 			})
-			.catch(err => dispatch(updatehasErrorMainPageBooks(true, err)));
+			.catch(err => dispatch(mainPageHasErrored(true, err)));
 	};
 }
 

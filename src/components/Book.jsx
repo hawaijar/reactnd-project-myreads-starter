@@ -2,10 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Constants from '../constant';
 import { updateBook } from '../actions';
+import { update } from '../BooksAPI';
 
 const Book = ({ dispatch, book }) => {
 	function handleUpdate(event, book) {
 		book.shelf = event.target.value;
+		/* eslint-disable no-console */
+		// console.log(book.shelf, Constants.categories[book.shelf]);
+		// update(book, Constants.categories[book.shelf], function(data) {
+		// 	/* eslint-disable no-console */
+		// 	console.log('done', data);
+		// 	dispatch(updateBook(book));
+		// });
 		dispatch(updateBook(book));
 	}
 	return (
