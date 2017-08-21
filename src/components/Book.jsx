@@ -9,7 +9,7 @@ const Book = props => {
 	function handleUpdate(event, book) {
 		const updatedBook = { ...book };
 		updatedBook.shelf = event.target.value;
-		dispatch(updateBook(updatedBook));
+		dispatch(updateBook(updatedBook, path));
 	}
 	return (
 		<div className="book">
@@ -48,10 +48,4 @@ const Book = props => {
 	);
 };
 
-function mapStateToProps(state, ownProps) {
-	return {
-		currentPagePath: state.currentPagePath
-	};
-}
-
-export default connect(mapStateToProps, null)(Book);
+export default connect(null, null)(Book);

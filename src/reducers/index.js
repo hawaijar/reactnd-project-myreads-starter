@@ -58,9 +58,9 @@ const mainPageBooks = (state = {}, action) => {
 		return books;
 	}
 	if (action.type === UPDATE_BOOK) {
-		const updatedBook = action.payload;
-		if (Object.values(state).find(book => book.title === updatedBook.title)) {
-			return { ...state, [updatedBook.title]: updatedBook };
+		const { path, book } = action.payload;
+		if (path === '/' || path === '/search') {
+			return { ...state, [book.title]: book };
 		}
 	}
 	return state;
@@ -86,9 +86,9 @@ const searchPageBooks = (state = {}, action) => {
 	}
 
 	if (action.type === UPDATE_BOOK) {
-		const updatedBook = action.payload;
-		if (Object.values(state).find(book => book.title === updatedBook.title)) {
-			return { ...state, [updatedBook.title]: updatedBook };
+		const { path, book } = action.payload;
+		if (path === '/search') {
+			return { ...state, [book.title]: book };
 		}
 	}
 

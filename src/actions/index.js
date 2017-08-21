@@ -52,10 +52,10 @@ export function SearchPageHasErrored(flag) {
 		payload: flag
 	};
 }
-export function updateBook(book) {
+export function updateBook(book, path) {
 	return {
 		type: UPDATE_BOOK,
-		payload: book
+		payload: { book, path }
 	};
 }
 export function getBooksFromAPI() {
