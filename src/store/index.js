@@ -11,5 +11,9 @@ const store = createStore(
 			: f => f
 	)
 );
+// store.subscribe(() => {
+// 	 eslint-disable no-console
+// 	console.log('1', store.getState());
+// });
 
 export default store;

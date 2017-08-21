@@ -2,7 +2,7 @@ import React from 'react';
 import Book from './Book';
 import * as Constants from '../constant';
 
-const BookShelf = ({ children: books, shelf }) => {
+const BookShelf = ({ children: books, shelf, path }) => {
   const title = 'None (not in any shelf)';
   return (
     books.length > 0 &&
@@ -14,13 +14,12 @@ const BookShelf = ({ children: books, shelf }) => {
         <ol className="books-grid">
           {books.map(book =>
             <li key={book.title}>
-              <Book book={book} />
+              <Book path={path} book={book} />
             </li>
           )}
         </ol>
       </div>
     </div>
-
   );
 };
 

@@ -5,8 +5,10 @@ import {
 	UPDATE_BOOK,
 	MAINPAGE_IS_LOADING,
 	MAINPAGE_HAS_ERRORED,
-	UPDATE_SEARCHPAGE_BOOKS,
-	ISLOADED_SEARCHPAGE
+	UPDATE_SEARCHPAGE,
+	SEARCHPAGE_IS_LOADING,
+	SEARCHPAGE_HAS_ERRORED,
+	CURRENT_PAGE
 } from '../actions';
 
 /* eslint-disable no-useless-computed-key */
@@ -63,21 +65,8 @@ const mainPageBooks = (state = {}, action) => {
 	}
 	return state;
 };
-
-const isMainPageLoading = (state = false, action) => {
-	if (action.type === MAINPAGE_IS_LOADING) {
-		return action.payload;
-	}
-	return state;
-};
-const hasErroredMainPage = (state = false, action) => {
-	if (action.type === MAINPAGE_HAS_ERRORED) {
-		return action.payload;
-	}
-	return state;
-};
 const searchPageBooks = (state = {}, action) => {
-	if (action.type === UPDATE_SEARCHPAGE_BOOKS) {
+	if (action.type === UPDATE_SEARCHPAGE) {
 		const data = action.payload;
 		let books = {};
 		/* eslint-disable no-shadow */
@@ -106,8 +95,34 @@ const searchPageBooks = (state = {}, action) => {
 	return state;
 };
 
-const isLoadingSearchPage = (state = false, action) => {
-	if (action.type === ISLOADED_SEARCHPAGE) {
+const isMainPageLoading = (state = false, action) => {
+	if (action.type === MAINPAGE_IS_LOADING) {
+		return action.payload;
+	}
+	return state;
+};
+const hasErroredMainPage = (state = false, action) => {
+	if (action.type === MAINPAGE_HAS_ERRORED) {
+		return action.payload;
+	}
+	return state;
+};
+
+const isSearchPageLoading = (state = false, action) => {
+	if (action.type === SEARCHPAGE_IS_LOADING) {
+		return action.payload;
+	}
+	return state;
+};
+const hasErroredSearchPage = (state = false, action) => {
+	if (action.type === SEARCHPAGE_HAS_ERRORED) {
+		return action.payload;
+	}
+	return state;
+};
+
+const currentPagePath = (state = '/', action) => {
+	if (action.type === CURRENT_PAGE) {
 		return action.payload;
 	}
 	return state;
@@ -118,6 +133,8 @@ const rootReducer = combineReducers({
 	isMainPageLoading,
 	hasErroredMainPage,
 	searchPageBooks,
-	isLoadingSearchPage
+	isSearchPageLoading,
+	hasErroredSearchPage,
+	currentPagePath
 });
 export default rootReducer;

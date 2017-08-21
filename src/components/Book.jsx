@@ -4,17 +4,12 @@ import * as Constants from '../constant';
 import { updateBook } from '../actions';
 import { update } from '../BooksAPI';
 
-const Book = ({ dispatch, book }) => {
+const Book = props => {
+	const { dispatch, book, path } = props;
 	function handleUpdate(event, book) {
-		book.shelf = event.target.value;
-		/* eslint-disable no-console */
-		// console.log(book.shelf, Constants.categories[book.shelf]);
-		// update(book, Constants.categories[book.shelf], function(data) {
-		// 	/* eslint-disable no-console */
-		// 	console.log('done', data);
-		// 	dispatch(updateBook(book));
-		// });
-		dispatch(updateBook(book));
+		const updatedBook = { ...book };
+		updatedBook.shelf = event.target.value;
+		dispatch(updateBook(updatedBook));
 	}
 	return (
 		<div className="book">
@@ -52,12 +47,11 @@ const Book = ({ dispatch, book }) => {
 		</div>
 	);
 };
-// const mapDispatchToProps = dispatch => {
-// 	return {
-// 		handleUpdate(dispatch, book) {
-// 			dispatch(updateBook(book));
-// 		}
-// 	};
-// };
 
-export default connect()(Book);
+function mapStateToProps(state, ownProps) {
+	return {
+		currentPagePath: state.currentPagePath
+	};
+}
+
+export default connect(mapStateToProps, null)(Book);

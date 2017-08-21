@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateSearchTerm, getSearchData } from '../actions';
+import { object } from 'prop-types';
+import { getSearchDataFromAPI, updateCurrentPagePath } from '../actions';
 import Book from './Book';
 import Spinner from './Spinner';
 import '../App.scss';
 
 class SearchPage extends Component {
+  constructor(props) {
+    super(props);
+  }
+  // handler = () => {
+  //   /* eslint-disable no-console */
+  //   console.log('5', this.context.store.getState());
+  // };
   state = {
     searchTerm: ''
   };
@@ -14,7 +22,7 @@ class SearchPage extends Component {
     const setBooks = books.map(book => {
       return (
         <li key={book.title}>
-          <Book book={book} />
+          <Book path={this.props.match.url} book={book} />
         </li>
       );
     });
@@ -29,11 +37,23 @@ class SearchPage extends Component {
   };
   reset = () => {
     this.props.dispatchInputChange('');
+    this.props.updatePath('/');
   };
+  // componentDidMount() {
+  //   this.context.store.subscribe(this.handler);
+  // }
   render() {
-    const { books, isLoadingSearchPage } = this.props;
+    const { books, isSearchPageLoading, hasErroredSearchPage } = this.props;
     let component;
-    if (isLoadingSearchPage) {
+    if (hasErroredSearchPage) {
+      component = (
+        <div>
+          <p>
+            Your search - <strong>{this.state.searchTerm}</strong> - did not match any books{' '}
+          </p>
+        </div>
+      );
+    } else if (isSearchPageLoading) {
       component = <Spinner />;
     } else {
       component = (
@@ -65,18 +85,25 @@ class SearchPage extends Component {
     );
   }
 }
+// SearchPage.contextTypes = {
+//   store: object
+// };
 
 const mapStateToProps = state => {
   return {
     books: Object.values(state.searchPageBooks),
-    isLoadingSearchPage: state.isLoadingSearchPage
+    isSearchPageLoading: state.isSearchPageLoading,
+    hasErroredSearchPage: state.hasErroredSearchPage
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     dispatchInputChange(query) {
-      dispatch(getSearchData(query));
+      dispatch(getSearchDataFromAPI(query));
+    },
+    updatePath(path) {
+      dispatch(updateCurrentPagePath(path));
     }
   };
 };

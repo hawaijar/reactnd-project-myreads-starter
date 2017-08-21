@@ -6,22 +6,20 @@ import store from '../store';
 import Library from './Library';
 import SearchPage from './SearchPage';
 
-class Main extends Component {
-	render() {
-		return (
+const Main = props => {
+	return (
+		<BrowserRouter>
 			<Provider store={store}>
-				<BrowserRouter>
-					<div>
-						<Switch>
-							<Route exact path="/" component={Library} />
-							<Route path="/search" component={SearchPage} />
-							<Redirect to="/" />
-						</Switch>
-					</div>
-				</BrowserRouter>
+				<div>
+					<Switch>
+						<Route exact path="/" component={Library} />
+						<Route path="/search" component={SearchPage} />
+						<Redirect to="/" />
+					</Switch>
+				</div>
 			</Provider>
-		);
-	}
-}
+		</BrowserRouter>
+	);
+};
 
 export default Main;
